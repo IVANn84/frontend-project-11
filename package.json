@@ -29,6 +29,7 @@
     "eslint-plugin-babel": "^5.3.1",
     "eslint-plugin-import": "^2.27.5",
     "html-webpack-plugin": "^5.5.1",
+    "mini-css-extract-plugin": "^2.7.5",
     "postcss-loader": "^7.2.4",
     "style-loader": "^3.3.2",
     "webpack": "^5.79.0",

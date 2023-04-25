@@ -25,20 +25,20 @@ const app = () => {
     posts: [],
   };
 
-  const schema = yup.string().trim().required().url();
+  const schema = yup.string().url('ссылка должна быть валидной');
 
-  const validate = (field) => schema.validate(field).then((data)=> console.log(data));
+  const validate = (field) => schema.validate(field);
+  const x = validate('https://ru.hexlons');
 
-
-  console.log(validate('https://ru.hexlet.io/lessons.rss'));
+  console.log(x);
 
   // ControLLer:
-  elements.form.addEventListener('submit', (el) => {
-    el.preventDefault();
-    const formData = new FormData(el.target);
-    // console.log(formData.get('url'));
-    // validate(formData.get('url'));
-  });
+  // elements.form.addEventListener('submit', (el) => {
+  //   el.preventDefault();
+  //   const formData = new FormData(el.target);
+  //   // console.log(formData.get('url'));
+  //   // validate(formData.get('url'));
+  // });
 };
 
 export default app;
