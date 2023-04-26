@@ -5,40 +5,59 @@ const app = () => {
   const elements = {
     container: document.querySelector('.container-xxl '),
     form: document.querySelector('.rss-form'),
-    fields: {
-      url: document.getElementById('url-input'),
-    },
+    field: document.getElementById('url-input'),
+    formFeedback: document.querySelector('.feedback'),
     submitButton: document.querySelector('button[type="submit"]'),
   };
   // console.log(
-  //   elements.container,
-  //   elements.form,
-  //   elements.fields.url,
-  //   elements.submitButton
+  //   // elements.container,
+  //   // elements.form,
+  //   // elements.fields.url,
+  //   // elements.submitButton,
+  //   elements.formFeedback
   // );
 
   const state = {
     form: {
-      state: 'filling',
+      processState: 'filling',
       error: {},
     },
     posts: [],
   };
 
-  const schema = yup.string().url('ссылка должна быть валидной');
-
-  const validate = (field) => schema.validate(field);
-  const x = validate('https://ru.hexlons');
-
-  console.log(x);
+  const validate = (url, urls) => {
+    const schema = yup
+      .string()
+      .trim()
+      .required()
+      .notOneOf(urls)
+      .url(); /* могут тесты не принять trim() */
+    return schema.validate(url);
+  };
 
   // ControLLer:
-  // elements.form.addEventListener('submit', (el) => {
-  //   el.preventDefault();
-  //   const formData = new FormData(el.target);
-  //   // console.log(formData.get('url'));
-  //   // validate(formData.get('url'));
-  // });
+
+  elements.form.addEventListener('submit', (el) => {
+    el.preventDefault();
+    const formData = new FormData(el.target);
+
+    validate(formData.get('url'), state.posts)
+      .then((data) => {
+        state.posts.push(data);
+        elements.formFeedback.classList.remove('text-danger');
+        elements.formFeedback.classList.add('text-success');
+        elements.formFeedback.textContent = 'RSS успешно загружен';
+        console.log(state.posts);
+        elements.form.reset();
+        elements.field.focus();
+      })
+      .catch(() => {
+        elements.field.classList.add('is-invalid');
+        elements.formFeedback.textContent = 'Cсылка должна быть валидным URL';
+        elements.form.reset();
+        elements.field.focus();
+      });
+  });
 };
 
 export default app;
