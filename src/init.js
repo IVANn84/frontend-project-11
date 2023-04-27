@@ -1,23 +1,18 @@
 import * as yup from 'yup';
+import { clearData } from './viev.js';
 import onChange from 'on-change';
+// import onChange from 'on-change';
 
 const app = () => {
   const elements = {
     container: document.querySelector('.container-xxl '),
     form: document.querySelector('.rss-form'),
-    field: document.getElementById('url-input'),
+    input: document.getElementById('url-input'),
     formFeedback: document.querySelector('.feedback'),
     submitButton: document.querySelector('button[type="submit"]'),
   };
-  // console.log(
-  //   // elements.container,
-  //   // elements.form,
-  //   // elements.fields.url,
-  //   // elements.submitButton,
-  //   elements.formFeedback
-  // );
 
-  const state = {
+  const initialState = {
     form: {
       processState: 'filling',
       error: {},
@@ -25,7 +20,7 @@ const app = () => {
     posts: [],
   };
 
-  const validate = (url, urls) => {
+  const isValidUrl = (url, urls) => {
     const schema = yup
       .string()
       .trim()
@@ -35,27 +30,31 @@ const app = () => {
     return schema.validate(url);
   };
 
+  // View
+  // const watchState = onChange(initialState, render);
+
   // ControLLer:
 
   elements.form.addEventListener('submit', (el) => {
     el.preventDefault();
     const formData = new FormData(el.target);
 
-    validate(formData.get('url'), state.posts)
+    isValidUrl(formData.get('url'), initialState.posts)
       .then((data) => {
-        state.posts.push(data);
-        elements.formFeedback.classList.remove('text-danger');
+        initialState.posts.push(data);
+        clearData(elements);
         elements.formFeedback.classList.add('text-success');
         elements.formFeedback.textContent = 'RSS успешно загружен';
-        console.log(state.posts);
         elements.form.reset();
-        elements.field.focus();
+        elements.input.focus();
       })
       .catch(() => {
-        elements.field.classList.add('is-invalid');
+        clearData(elements);
+        elements.formFeedback.classList.add('text-danger');
+        elements.input.classList.add('is-invalid');
         elements.formFeedback.textContent = 'Cсылка должна быть валидным URL';
         elements.form.reset();
-        elements.field.focus();
+        elements.input.focus();
       });
   });
 };
