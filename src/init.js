@@ -1,9 +1,18 @@
 import * as yup from 'yup';
-import { clearData } from './viev.js';
 import onChange from 'on-change';
-// import onChange from 'on-change';
+import i18next from 'i18next';
+import resources from './locales/ru.js';
+import render from './viev.js';
 
 const app = () => {
+  const defaultLanguage = 'ru';
+  const i18nInstance = i18next.createInstance();
+  i18nInstance.init({
+    lng: defaultLanguage,
+    resources,
+  });
+  console.log(i18nInstance.t('form.loader'));
+
   const elements = {
     container: document.querySelector('.container-xxl '),
     form: document.querySelector('.rss-form'),
@@ -31,7 +40,8 @@ const app = () => {
   };
 
   // View
-  // const watchState = onChange(initialState, render);
+
+  const watchState = onChange(initialState, render(elements, initialState));
 
   // ControLLer:
 
@@ -41,20 +51,11 @@ const app = () => {
 
     isValidUrl(formData.get('url'), initialState.posts)
       .then((data) => {
-        initialState.posts.push(data);
-        clearData(elements);
-        elements.formFeedback.classList.add('text-success');
-        elements.formFeedback.textContent = 'RSS успешно загружен';
-        elements.form.reset();
-        elements.input.focus();
+        watchState.form.processState = 'sending';
+        watchState.posts.push(data);
       })
       .catch(() => {
-        clearData(elements);
-        elements.formFeedback.classList.add('text-danger');
-        elements.input.classList.add('is-invalid');
-        elements.formFeedback.textContent = 'Cсылка должна быть валидным URL';
-        elements.form.reset();
-        elements.input.focus();
+        watchState.form.processState = 'failed';
       });
   });
 };
