@@ -55,7 +55,7 @@ const app = () => {
 
     isValidUrl(formData.get('url'), initialState.posts)
       .then((data) => {
-        watchState.form.processState = 'sending';
+        watchState.form.processState = 'loading';
         watchState.posts.push(data);
       })
       .catch(() => {

@@ -9,10 +9,10 @@ const clearData = (elements) => {
 const handlerFormUrl = (elements, value, i18nInstance) => {
   const { formFeedback: isFeedback } = elements;
   switch (value) {
-    case 'sending':
+    case 'loading':
       clearData(elements);
       elements.formFeedback.classList.add('text-success');
-      isFeedback.textContent = i18nInstance.t('status.loading');
+      isFeedback.textContent = i18nInstance.t(`status.${value}`);
       elements.form.reset();
       elements.input.focus();
       break;
