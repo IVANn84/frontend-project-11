@@ -1,17 +1,28 @@
 import * as yup from 'yup';
 import onChange from 'on-change';
 import i18next from 'i18next';
-import resources from './locales/ru.js';
+import ru from './locales/ru.js';
 import render from './viev.js';
 
+const isValidUrl = (url, urls) => {
+  const schema = yup
+    .string()
+    .trim()
+    .required()
+    .notOneOf(urls)
+    .url(); /* могут тесты не принять trim() */
+  return schema.validate(url);
+};
+
 const app = () => {
-  const defaultLanguage = 'ru';
   const i18nInstance = i18next.createInstance();
   i18nInstance.init({
-    lng: defaultLanguage,
-    resources,
+    lng: 'ru',
+    debug: true,
+    resources: {
+      ru,
+    },
   });
-  console.log(i18nInstance.t('form.loader'));
 
   const elements = {
     container: document.querySelector('.container-xxl '),
@@ -29,19 +40,12 @@ const app = () => {
     posts: [],
   };
 
-  const isValidUrl = (url, urls) => {
-    const schema = yup
-      .string()
-      .trim()
-      .required()
-      .notOneOf(urls)
-      .url(); /* могут тесты не принять trim() */
-    return schema.validate(url);
-  };
-
   // View
 
-  const watchState = onChange(initialState, render(elements, initialState));
+  const watchState = onChange(
+    initialState,
+    render(elements, initialState, i18nInstance),
+  );
 
   // ControLLer:
 

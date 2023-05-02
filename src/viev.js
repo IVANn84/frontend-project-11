@@ -6,12 +6,13 @@ const clearData = (elements) => {
 
   input.classList.remove('is-invalid');
 };
-const handlerFormUrl = (elements, value) => {
+const handlerFormUrl = (elements, value, i18nInstance) => {
+  const { formFeedback: isFeedback } = elements;
   switch (value) {
     case 'sending':
       clearData(elements);
       elements.formFeedback.classList.add('text-success');
-      elements.formFeedback.textContent = 'RSS успешно загружен';
+      isFeedback.textContent = i18nInstance.t('status.loading');
       elements.form.reset();
       elements.input.focus();
       break;
@@ -19,7 +20,7 @@ const handlerFormUrl = (elements, value) => {
       clearData(elements);
       elements.formFeedback.classList.add('text-danger');
       elements.input.classList.add('is-invalid');
-      elements.formFeedback.textContent = 'Cсылка должна быть валидным URL';
+      isFeedback.textContent = i18nInstance.t('errors.invalidUrl');
       elements.form.reset();
       elements.input.focus();
       break;
@@ -28,8 +29,8 @@ const handlerFormUrl = (elements, value) => {
   }
 };
 
-const render = (elements, initialState) => (path, value) => {
-  handlerFormUrl(elements, value);
+const render = (elements, initialState, i18nInstance) => (path, value) => {
+  handlerFormUrl(elements, value, i18nInstance);
 };
 
 export default render;

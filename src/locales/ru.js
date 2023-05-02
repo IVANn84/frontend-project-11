@@ -1,13 +1,15 @@
 export default {
   translation: {
-    languages: {
-      ru: 'Русский',
+    errors: {
+      invalidUrl: 'Ссылка должна быть валидным URL',
+      // alreadyLoaded: 'RSS уже существует',
+      // required: 'Не должно быть пустым',
+      // invalidRSS: 'ресурс не содержит валидный RSS',
+      // network: 'Ошибка сети',
+      // unableToParseData: 'Неизвестная ошибка. Что то пошло не так',
     },
-    form: {
-      loaded: 'RSS успешно загружен',
-      errors: {
-        addressUrl: 'Cсылка должна быть валидным URL',
-      },
+    status: {
+      loading: 'RSS успешно загружен',
     },
   },
 };
