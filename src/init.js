@@ -1,6 +1,8 @@
 import * as yup from 'yup';
 import onChange from 'on-change';
 import i18next from 'i18next';
+import axios from 'axios';
+import parseData from './parser.js';
 import ru from './locales/ru.js';
 import render from './viev.js';
 
@@ -9,9 +11,21 @@ const isValidUrl = (url, urls) => {
     .string()
     .trim()
     .required()
-    .notOneOf(urls)
-    .url(); /* могут тесты не принять trim() */
+    .notOneOf(urls, 'RSS уже существует')
+    .url('ресурс не содержит валидный RSS'); /* могут тесты не принять trim() */
   return schema.validate(url);
+};
+
+const getUrlThroughProxi = (url) =>
+  `https://allorigins.hexlet.app/get?disableCache=true&url=${url}`;
+
+const getDataRss = (document) => {
+  const title = document.querySelector('title').textContent;
+  const descriotion = document.querySelector('description').textContent;
+  const item = document.querySelectorAll('item');
+  const items = Array.from(item).map((el) => el.textContent.split('/n'));
+  console.log(items);
+  return { title, descriotion, items };
 };
 
 const app = () => {
@@ -35,8 +49,9 @@ const app = () => {
   const initialState = {
     form: {
       processState: 'filling',
-      error: {},
+      error: null,
     },
+    feeds: [],
     posts: [],
   };
 
@@ -44,7 +59,7 @@ const app = () => {
 
   const watchState = onChange(
     initialState,
-    render(elements, initialState, i18nInstance),
+    render(elements, initialState, i18nInstance)
   );
 
   // ControLLer:
@@ -53,12 +68,19 @@ const app = () => {
     el.preventDefault();
     const formData = new FormData(el.target);
 
-    isValidUrl(formData.get('url'), initialState.posts)
-      .then((data) => {
+    isValidUrl(formData.get('url'), initialState.feeds)
+      .then((link) => axios.get(getUrlThroughProxi(link)))
+      .then((response) => {
         watchState.form.processState = 'loading';
-        watchState.posts.push(data);
+        const result = parseData(response.data.contents);
+        const dataRSS = getDataRss(result);
+        console.log(dataRSS);
+
+        // watchState.feeds.push(link);
       })
-      .catch(() => {
+
+      .catch((err) => {
+        console.log(err.message);
         watchState.form.processState = 'failed';
       });
   });
