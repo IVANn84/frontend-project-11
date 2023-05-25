@@ -2,6 +2,7 @@ import * as yup from 'yup';
 import onChange from 'on-change';
 import i18next from 'i18next';
 import axios from 'axios';
+import _ from 'lodash';
 import parseData from './parser.js';
 import ru from './locales/ru.js';
 import render from './viev.js';
@@ -11,21 +12,17 @@ const isValidUrl = (url, urls) => {
     .string()
     .trim()
     .required()
-    .notOneOf(urls, 'RSS уже существует')
-    .url('ресурс не содержит валидный RSS'); /* могут тесты не принять trim() */
+    .notOneOf(urls, 'alreadyLoaded')
+    .url('invalidUrl');
   return schema.validate(url);
 };
 
-const getUrlThroughProxi = (url) =>
-  `https://allorigins.hexlet.app/get?disableCache=true&url=${url}`;
+const getUrlThroughProxi = (url) => {
+  const result = new URL('https://allorigins.hexlet.app/get');
+  result.searchParams.set('url', url);
+  result.searchParams.set('disableCache', true);
 
-const getDataRss = (document) => {
-  const title = document.querySelector('title').textContent;
-  const descriotion = document.querySelector('description').textContent;
-  const item = document.querySelectorAll('item');
-  const items = Array.from(item).map((el) => el.textContent.split('/n'));
-  console.log(items);
-  return { title, descriotion, items };
+  return result;
 };
 
 const app = () => {
@@ -67,21 +64,28 @@ const app = () => {
   elements.form.addEventListener('submit', (el) => {
     el.preventDefault();
     const formData = new FormData(el.target);
+    const currentUrl = formData.get('url');
 
-    isValidUrl(formData.get('url'), initialState.feeds)
+    isValidUrl(currentUrl, initialState.feeds)
       .then((link) => axios.get(getUrlThroughProxi(link)))
       .then((response) => {
-        watchState.form.processState = 'loading';
-        const result = parseData(response.data.contents);
-        const dataRSS = getDataRss(result);
+        const dataRSS = parseData(response.data.contents);
+        dataRSS.feed.id = _.uniqueId();
+        dataRSS.feed.url = currentUrl;
         console.log(dataRSS);
-
-        // watchState.feeds.push(link);
+        watchState.form.processState = 'loading';
       })
 
       .catch((err) => {
-        console.log(err.message);
         watchState.form.processState = 'failed';
+        console.log(initialState.form.error);
+
+        if (err.name === 'AxiosError') {
+          watchState.form.error = 'network';
+          console.log(initialState.form.error);
+          return;
+        }
+        watchState.form.error = err.message;
       });
   });
 };
