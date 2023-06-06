@@ -46,7 +46,7 @@ const app = () => {
   const initialState = {
     form: {
       processState: 'filling',
-      error: null,
+      error: '',
     },
     feeds: [],
     posts: [],
@@ -66,19 +66,27 @@ const app = () => {
     const formData = new FormData(el.target);
     const currentUrl = formData.get('url');
 
-    isValidUrl(currentUrl, initialState.feeds)
+    const urls = initialState.feeds.map((feed) => feed.url);
+    isValidUrl(currentUrl, urls)
       .then((link) => axios.get(getUrlThroughProxi(link)))
       .then((response) => {
         const dataRSS = parseData(response.data.contents);
         dataRSS.feed.id = _.uniqueId();
         dataRSS.feed.url = currentUrl;
         console.log(dataRSS);
+        dataRSS.posts.map((post) => {
+          const postId = post;
+          postId.id = _.uniqueId();
+          return postId;
+        });
+        watchState.feeds.push(dataRSS.feed);
+        watchState.posts.unshift(...dataRSS.posts);
         watchState.form.processState = 'loading';
       })
 
       .catch((err) => {
         watchState.form.processState = 'failed';
-        console.log(initialState.form.error);
+        console.log(err.message);
 
         if (err.name === 'AxiosError') {
           watchState.form.error = 'network';
@@ -86,6 +94,7 @@ const app = () => {
           return;
         }
         watchState.form.error = err.message;
+        console.log(watchState.form.error);
       });
   });
 };
