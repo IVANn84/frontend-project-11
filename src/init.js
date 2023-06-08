@@ -5,7 +5,7 @@ import axios from 'axios';
 import _ from 'lodash';
 import parseData from './parser.js';
 import ru from './locales/ru.js';
-import render from './viev.js';
+import render from './view.js';
 
 const isValidUrl = (url, urls) => {
   const schema = yup
@@ -41,6 +41,8 @@ const app = () => {
     input: document.getElementById('url-input'),
     formFeedback: document.querySelector('.feedback'),
     submitButton: document.querySelector('button[type="submit"]'),
+    feeds: document.querySelector('.feeds'),
+    posts: document.querySelector('.posts'),
   };
 
   const initialState = {
@@ -79,14 +81,14 @@ const app = () => {
           postId.id = _.uniqueId();
           return postId;
         });
+        watchState.form.processState = 'loading';
         watchState.feeds.push(dataRSS.feed);
         watchState.posts.unshift(...dataRSS.posts);
-        watchState.form.processState = 'loading';
+        watchState.form.processState = 'success';
       })
 
       .catch((err) => {
         watchState.form.error = err.message;
-        // console.log(err.message);
 
         if (err.name === 'AxiosError') {
           watchState.form.error = 'network';

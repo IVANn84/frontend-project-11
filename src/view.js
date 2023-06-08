@@ -1,3 +1,6 @@
+import renderFeeds from './renderFeeds.js';
+import renderPosts from './renderPosts.js';
+
 const clearData = (elements) => {
   const { input, formFeedback } = elements;
   formFeedback.classList.remove('text-danger');
@@ -7,20 +10,17 @@ const clearData = (elements) => {
 };
 const handlerFormUrl = (elements, value, i18nInstance, initialState) => {
   const { formFeedback: isFeedback } = elements;
+  clearData(elements);
   switch (value) {
-    case 'loading':
-      clearData(elements);
+    case 'success':
       elements.formFeedback.classList.add('text-success');
-      isFeedback.textContent = i18nInstance.t(`status.${value}`);
+      isFeedback.textContent = i18nInstance.t('status.loading');
       elements.form.reset();
       elements.input.focus();
       break;
     case 'failed':
-      clearData(elements);
       elements.formFeedback.classList.add('text-danger');
       elements.input.classList.add('is-invalid');
-      console.log(initialState.form.error);
-
       isFeedback.textContent = i18nInstance.t(
         `errors.${[initialState.form.error]}`
       );
@@ -33,7 +33,19 @@ const handlerFormUrl = (elements, value, i18nInstance, initialState) => {
 };
 
 const render = (elements, initialState, i18nInstance) => (path, value) => {
-  handlerFormUrl(elements, value, i18nInstance, initialState);
+  switch (path) {
+    case 'form.processState':
+      handlerFormUrl(elements, value, i18nInstance, initialState);
+      break;
+    case 'feeds':
+      renderFeeds(value, elements, i18nInstance);
+      break;
+    case 'posts':
+      renderPosts(initialState, value, elements, i18nInstance);
+      break;
+    default:
+      break;
+  }
 };
 
 export default render;

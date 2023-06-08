@@ -11,5 +11,12 @@ export default {
     status: {
       loading: 'RSS успешно загружен',
     },
+    renderFeeds: {
+      header: 'Фиды',
+    },
+    renderPosts: {
+      header: 'Посты',
+      button: 'Просмотр',
+    },
   },
 };
