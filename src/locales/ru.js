@@ -9,7 +9,7 @@ export default {
       // unableToParseData: 'Неизвестная ошибка. Что то пошло не так',
     },
     status: {
-      loading: 'RSS успешно загружен',
+      success: 'RSS успешно загружен',
     },
     renderFeeds: {
       header: 'Фиды',

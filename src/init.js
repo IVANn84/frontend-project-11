@@ -81,22 +81,18 @@ const app = () => {
           postId.id = _.uniqueId();
           return postId;
         });
-        watchState.form.processState = 'loading';
+        watchState.form = { processState: 'loading', error: '' };
         watchState.feeds.push(dataRSS.feed);
         watchState.posts.unshift(...dataRSS.posts);
-        watchState.form.processState = 'success';
+        watchState.form = { processState: 'success', error: '' };
       })
 
       .catch((err) => {
-        watchState.form.error = err.message;
+        watchState.form = { processState: 'failed', error: err.message };
 
         if (err.name === 'AxiosError') {
-          watchState.form.error = 'network';
-          watchState.form.processState = 'failed';
-          console.log(initialState.form.error);
-          return;
+          watchState.form = { processState: 'failed', error: 'network' };
         }
-        watchState.form.processState = 'failed';
       });
   });
 };

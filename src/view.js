@@ -10,11 +10,13 @@ const clearData = (elements) => {
 };
 const handlerFormUrl = (elements, value, i18nInstance, initialState) => {
   const { formFeedback: isFeedback } = elements;
+  const { processState: step } = value;
+
   clearData(elements);
-  switch (value) {
+  switch (step) {
     case 'success':
       elements.formFeedback.classList.add('text-success');
-      isFeedback.textContent = i18nInstance.t('status.loading');
+      isFeedback.textContent = i18nInstance.t(`status.${step}`);
       elements.form.reset();
       elements.input.focus();
       break;
@@ -34,7 +36,7 @@ const handlerFormUrl = (elements, value, i18nInstance, initialState) => {
 
 const render = (elements, initialState, i18nInstance) => (path, value) => {
   switch (path) {
-    case 'form.processState':
+    case 'form':
       handlerFormUrl(elements, value, i18nInstance, initialState);
       break;
     case 'feeds':
