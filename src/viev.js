@@ -22,7 +22,7 @@ const handlerFormUrl = (elements, value, i18nInstance, initialState) => {
       console.log(initialState.form.error);
 
       isFeedback.textContent = i18nInstance.t(
-        `errors.${initialState.form.error}`
+        `errors.${[initialState.form.error]}`
       );
       elements.form.reset();
       elements.input.focus();

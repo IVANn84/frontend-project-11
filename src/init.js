@@ -85,18 +85,17 @@ const app = () => {
       })
 
       .catch((err) => {
-        watchState.form.processState = 'failed';
-        console.log(err.message);
+        watchState.form.error = err.message;
+        // console.log(err.message);
 
         if (err.name === 'AxiosError') {
           watchState.form.error = 'network';
+          watchState.form.processState = 'failed';
           console.log(initialState.form.error);
           return;
         }
-        watchState.form.error = err.message;
-        console.log(watchState.form.error);
+        watchState.form.processState = 'failed';
       });
   });
 };
-
 export default app;
