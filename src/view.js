@@ -1,3 +1,4 @@
+import renderModal from './renderModal.js';
 import renderFeeds from './renderFeeds.js';
 import renderPosts from './renderPosts.js';
 
@@ -8,6 +9,15 @@ const clearData = (elements) => {
 
   input.classList.remove('is-invalid');
 };
+
+const renderVisitedPosts = (idVisitedPosts) => {
+  idVisitedPosts.forEach((id) => {
+    const link = document.querySelector(`a[data-id="${id}"]`);
+    link.classList.remove('fw-bold');
+    link.classList.add('fw-normal', 'link-secondary');
+  });
+};
+
 const handlerFormUrl = (elements, value, i18nInstance, initialState) => {
   const { formFeedback: isFeedback } = elements;
   const { processState: step } = value;
@@ -24,7 +34,7 @@ const handlerFormUrl = (elements, value, i18nInstance, initialState) => {
       elements.formFeedback.classList.add('text-danger');
       elements.input.classList.add('is-invalid');
       isFeedback.textContent = i18nInstance.t(
-        `errors.${[initialState.form.error]}`
+        `errors.${[initialState.form.error]}`,
       );
       elements.form.reset();
       elements.input.focus();
@@ -44,6 +54,12 @@ const render = (elements, initialState, i18nInstance) => (path, value) => {
       break;
     case 'posts':
       renderPosts(initialState, value, elements, i18nInstance);
+      break;
+    case 'idVisitedPosts':
+      renderVisitedPosts(value);
+      break;
+    case 'idCurrentPost':
+      renderModal(initialState, value);
       break;
     default:
       break;

@@ -12,7 +12,7 @@ export default (initialState, postsList, elements, i18nInstance) => {
       'justify-content-between',
       'align-items-start',
       'border-0',
-      'border-end-0'
+      'border-end-0',
     );
 
     const a = document.createElement('a');

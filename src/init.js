@@ -25,6 +25,41 @@ const getUrlThroughProxi = (url) => {
   return result;
 };
 
+const getUpdatePosts = (state) => {
+  if (state.posts.length === 0) {
+    return;
+  }
+  const urls = state.feeds.map((feed) => feed.url);
+  const promises = urls.map((url) => axios
+    .get(getUrlThroughProxi(url))
+    .then((response) => {
+      const data = parseData(response.data.contents);
+
+      const comparator = (arrayValue, otherValue) => arrayValue.title === otherValue.title;
+      const addedPosts = _.differenceWith(
+        data.items,
+        state.posts,
+        comparator,
+      );
+      state.posts = addedPosts.concat(...state.posts);
+    })
+    .catch((err) => {
+      console.error(err);
+    }));
+
+  Promise.all(promises).finally(() => setTimeout(() => getUpdatePosts(state), 5000));
+};
+const elements = {
+  container: document.querySelector('.container-xxl '),
+  form: document.querySelector('.rss-form'),
+  input: document.getElementById('url-input'),
+  formFeedback: document.querySelector('.feedback'),
+  submitButton: document.querySelector('button[type="submit"]'),
+  feeds: document.querySelector('.feeds'),
+  posts: document.querySelector('.posts'),
+  button: document.querySelector('button'),
+};
+
 const app = () => {
   const i18nInstance = i18next.createInstance();
   i18nInstance.init({
@@ -35,30 +70,24 @@ const app = () => {
     },
   });
 
-  const elements = {
-    container: document.querySelector('.container-xxl '),
-    form: document.querySelector('.rss-form'),
-    input: document.getElementById('url-input'),
-    formFeedback: document.querySelector('.feedback'),
-    submitButton: document.querySelector('button[type="submit"]'),
-    feeds: document.querySelector('.feeds'),
-    posts: document.querySelector('.posts'),
-  };
-
   const initialState = {
     form: {
       processState: 'filling',
       error: '',
     },
+
     feeds: [],
     posts: [],
+
+    idCurrentPost: '',
+    idVisitedPosts: [],
   };
 
   // View
 
   const watchState = onChange(
     initialState,
-    render(elements, initialState, i18nInstance)
+    render(elements, initialState, i18nInstance),
   );
 
   // ControLLer:
@@ -75,7 +104,6 @@ const app = () => {
         const dataRSS = parseData(response.data.contents);
         dataRSS.feed.id = _.uniqueId();
         dataRSS.feed.url = currentUrl;
-        console.log(dataRSS);
         dataRSS.posts.map((post) => {
           const postId = post;
           postId.id = _.uniqueId();
@@ -95,5 +123,16 @@ const app = () => {
         }
       });
   });
+
+  elements.posts.addEventListener('click', ({ target }) => {
+    console.log({ target });
+    const { id } = target.dataset;
+    watchState.idCurrentPost = id;
+    if (!watchState.idVisitedPosts.includes(id)) {
+      watchState.idVisitedPosts.push(id);
+    }
+  });
+  getUpdatePosts(watchState);
 };
+
 export default app;
