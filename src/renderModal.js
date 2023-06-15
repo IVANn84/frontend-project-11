@@ -1,14 +1,11 @@
-export default (initialState, postId) => {
-  const currentPost = initialState.posts.find((post) => post.id === postId);
-  console.log(currentPost);
-
+export default (state, postId) => {
+  const currentPost = state.posts.find((p) => p.id === postId);
   const {
     id, title, description, link,
   } = currentPost;
 
   const modal = document.querySelector('.modal');
-  console.log(modal);
-  
+
   const modalTitle = document.querySelector('.modal-title');
   const modalBody = document.querySelector('.modal-body');
   const modalLink = document.querySelector('.modal-link');

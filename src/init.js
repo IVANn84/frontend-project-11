@@ -125,7 +125,6 @@ const app = () => {
   });
 
   elements.posts.addEventListener('click', ({ target }) => {
-    console.log({ target });
     const { id } = target.dataset;
     watchState.idCurrentPost = id;
     if (!watchState.idVisitedPosts.includes(id)) {

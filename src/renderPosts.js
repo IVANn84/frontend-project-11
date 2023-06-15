@@ -22,11 +22,11 @@ export default (initialState, postsList, elements, i18nInstance) => {
     a.setAttribute('target', '_blank');
     a.setAttribute('rel', 'noopener noreferrer');
 
-    // if (initialState.idVisitedPosts.includes(id)) {
-    //   a.classList.add('fw-normal');
-    // } else {
-    //   a.classList.add('fw-bold');
-    // }
+    if (initialState.idVisitedPosts.includes(id)) {
+      a.classList.add('fw-normal');
+    } else {
+      a.classList.add('fw-bold');
+    }
 
     const button = document.createElement('button');
     button.textContent = i18nInstance.t('renderPosts.button');
