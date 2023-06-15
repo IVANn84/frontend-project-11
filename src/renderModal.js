@@ -1,5 +1,5 @@
 export default (state, postId) => {
-  const currentPost = state.posts.find((p) => p.id === postId);
+  const currentPost = state.posts.find((post) => post.id === postId);
   const {
     id, title, description, link,
   } = currentPost;

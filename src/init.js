@@ -50,7 +50,6 @@ const getUpdatePosts = (state) => {
   Promise.all(promises).finally(() => setTimeout(() => getUpdatePosts(state), 5000));
 };
 const elements = {
-  container: document.querySelector('.container-xxl '),
   form: document.querySelector('.rss-form'),
   input: document.getElementById('url-input'),
   formFeedback: document.querySelector('.feedback'),
