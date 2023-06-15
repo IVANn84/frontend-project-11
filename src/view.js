@@ -3,11 +3,14 @@ import renderFeeds from './renderFeeds.js';
 import renderPosts from './renderPosts.js';
 
 const clearData = (elements) => {
-  const { input, formFeedback } = elements;
+  const { input, formFeedback, button } = elements;
   formFeedback.classList.remove('text-danger');
   formFeedback.classList.remove('text-success');
 
   input.classList.remove('is-invalid');
+
+  input.disabled = false;
+  button.disabled = false;
 };
 
 const renderVisitedPosts = (idVisitedPosts) => {
@@ -24,6 +27,10 @@ const handlerFormUrl = (elements, value, i18nInstance, initialState) => {
 
   clearData(elements);
   switch (step) {
+    case 'loading':
+      elements.input.disabled = true;
+      elements.button.disabled = true;
+      break;
     case 'success':
       elements.formFeedback.classList.add('text-success');
       isFeedback.textContent = i18nInstance.t(`status.${step}`);
@@ -36,8 +43,6 @@ const handlerFormUrl = (elements, value, i18nInstance, initialState) => {
       isFeedback.textContent = i18nInstance.t(
         `errors.${[initialState.form.error]}`,
       );
-      elements.form.reset();
-      elements.input.focus();
       break;
     default:
       break;

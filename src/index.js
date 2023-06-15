@@ -1,5 +1,5 @@
 import './styles.scss';
-import bootstrap from 'bootstrap';
+import 'bootstrap/js/src/modal';
 import app from './init.js';
 
 app();
