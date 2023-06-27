@@ -10,7 +10,6 @@ import render from './view.js';
 const isValidUrl = (url, urls) => {
   const schema = yup
     .string()
-    .trim()
     .required()
     .notOneOf(urls, 'alreadyLoaded')
     .url('invalidUrl');
