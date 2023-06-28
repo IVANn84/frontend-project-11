@@ -1,7 +1,7 @@
 {
   "name": "@hexlet/code",
   "version": "1.0.0",
-  "description": "rss-agregator",
+  "description": "rss-aggregator",
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server --open",
