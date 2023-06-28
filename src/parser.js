@@ -6,7 +6,7 @@ const parseData = (data) => {
   if (errorNode) {
     const err = new Error();
     err.name = errorNode.textContent;
-    err.message = 'invalidRss';
+    err.message = 'invalidUrl';
     throw err;
   }
   try {
