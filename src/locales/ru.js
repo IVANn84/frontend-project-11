@@ -4,7 +4,7 @@ export default {
       invalidUrl: 'Ссылка должна быть валидным URL',
       alreadyLoaded: 'RSS уже существует',
       required: 'Не должно быть пустым',
-      invalidRSS: 'ресурс не содержит валидный RSS',
+      invalidRSS: 'Ресурс не содержит валидный RSS',
       network: 'Ошибка сети',
       unableToParseData: 'Неизвестная ошибка. Что то пошло не так',
     },
