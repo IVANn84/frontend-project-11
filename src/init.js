@@ -7,7 +7,7 @@ import parseData from './parser.js';
 import ru from './locales/ru.js';
 import render from './view.js';
 
-const isValidUrl = (url, urls) => {
+const checkValidUrl = (url, urls) => {
   const schema = yup
     .string()
     .required()
@@ -16,12 +16,15 @@ const isValidUrl = (url, urls) => {
   return schema.validate(url);
 };
 
-const getUrlThroughProxi = (url) => {
+const addProxi = (url) => {
   const result = new URL('https://allorigins.hexlet.app/get');
   result.searchParams.set('url', url);
   result.searchParams.set('disableCache', true);
 
-  return result;
+  console.log(result);
+  console.log(result.toString());
+
+  return result.toString();
 };
 
 const getUpdatePosts = (state) => {
@@ -30,7 +33,7 @@ const getUpdatePosts = (state) => {
   }
   const urls = state.feeds.map((feed) => feed.url);
   const promises = urls.map((url) => axios
-    .get(getUrlThroughProxi(url))
+    .get(addProxi(url))
     .then((response) => {
       const data = parseData(response.data.contents);
 
@@ -96,8 +99,8 @@ const app = () => {
     const currentUrl = formData.get('url');
 
     const urls = initialState.feeds.map((feed) => feed.url);
-    isValidUrl(currentUrl, urls)
-      .then((link) => axios.get(getUrlThroughProxi(link)))
+    checkValidUrl(currentUrl, urls)
+      .then((link) => axios.get(addProxi(link)))
       .then((response) => {
         const dataRSS = parseData(response.data.contents);
         dataRSS.feed.id = _.uniqueId();
