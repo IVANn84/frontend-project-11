@@ -21,9 +21,6 @@ const addProxi = (url) => {
   result.searchParams.set('url', url);
   result.searchParams.set('disableCache', true);
 
-  console.log(result);
-  console.log(result.toString());
-
   return result.toString();
 };
 
