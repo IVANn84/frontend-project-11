@@ -20,3 +20,5 @@ export default {
     },
   },
 };
+
+// ui: { idCurrentPost: null, idVisitedPosts: new Set() },

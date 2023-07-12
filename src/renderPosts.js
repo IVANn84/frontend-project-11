@@ -22,7 +22,7 @@ export default (initialState, postsList, elements, i18nInstance) => {
     a.setAttribute('target', '_blank');
     a.setAttribute('rel', 'noopener noreferrer');
 
-    if (initialState.idVisitedPosts.includes(id)) {
+    if (initialState.ui.visitedPosts.has(id)) {
       a.classList.add('fw-normal');
     } else {
       a.classList.add('fw-bold');

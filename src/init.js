@@ -78,8 +78,7 @@ const app = () => {
         feeds: [],
         posts: [],
 
-        idCurrentPost: '',
-        idVisitedPosts: [],
+        ui: { id: null, visitedPosts: new Set() },
       };
 
       // View
@@ -125,10 +124,8 @@ const app = () => {
 
       elements.posts.addEventListener('click', ({ target }) => {
         const { id } = target.dataset;
-        watchState.idCurrentPost = id;
-        if (!watchState.idVisitedPosts.includes(id)) {
-          watchState.idVisitedPosts.push(id);
-        }
+        watchState.ui.id = id;
+        watchState.ui.visitedPosts.add(id);
       });
       getUpdatePosts(watchState);
     });

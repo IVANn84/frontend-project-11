@@ -60,10 +60,10 @@ const render = (elements, initialState, i18nInstance) => (path, value) => {
     case 'posts':
       renderPosts(initialState, value, elements, i18nInstance);
       break;
-    case 'idVisitedPosts':
+    case 'ui.visitedPosts':
       renderVisitedPosts(value);
       break;
-    case 'idCurrentPost':
+    case 'ui.id':
       renderModal(initialState, value);
       break;
     default:
