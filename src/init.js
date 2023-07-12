@@ -60,76 +60,78 @@ const elements = {
 
 const app = () => {
   const i18nInstance = i18next.createInstance();
-  i18nInstance.init({
-    lng: 'ru',
-    debug: true,
-    resources: {
-      ru,
-    },
-  });
+  i18nInstance
+    .init({
+      lng: 'ru',
+      debug: true,
+      resources: {
+        ru,
+      },
+    })
+    .then(() => {
+      const initialState = {
+        form: {
+          processState: 'filling',
+          error: '',
+        },
 
-  const initialState = {
-    form: {
-      processState: 'filling',
-      error: '',
-    },
+        feeds: [],
+        posts: [],
 
-    feeds: [],
-    posts: [],
+        idCurrentPost: '',
+        idVisitedPosts: [],
+      };
 
-    idCurrentPost: '',
-    idVisitedPosts: [],
-  };
+      // View
 
-  // View
+      const watchState = onChange(
+        initialState,
+        render(elements, initialState, i18nInstance),
+      );
 
-  const watchState = onChange(
-    initialState,
-    render(elements, initialState, i18nInstance),
-  );
+      // ControLLer:
 
-  // ControLLer:
+      elements.form.addEventListener('submit', (el) => {
+        el.preventDefault();
+        const formData = new FormData(el.target);
+        const currentUrl = formData.get('url');
 
-  elements.form.addEventListener('submit', (el) => {
-    el.preventDefault();
-    const formData = new FormData(el.target);
-    const currentUrl = formData.get('url');
+        const urls = initialState.feeds.map((feed) => feed.url);
+        checkValidUrl(currentUrl, urls)
+          .then((link) => axios.get(addProxi(link)))
+          .then((response) => {
+            const dataRSS = parseData(response.data.contents);
+            dataRSS.feed.id = _.uniqueId();
+            dataRSS.feed.url = currentUrl;
+            dataRSS.posts.map((post) => {
+              const postId = post;
+              postId.id = _.uniqueId();
+              return postId;
+            });
+            watchState.form = { processState: 'loading', error: '' };
+            watchState.feeds.push(dataRSS.feed);
+            watchState.posts.unshift(...dataRSS.posts);
+            watchState.form = { processState: 'success', error: '' };
+          })
 
-    const urls = initialState.feeds.map((feed) => feed.url);
-    checkValidUrl(currentUrl, urls)
-      .then((link) => axios.get(addProxi(link)))
-      .then((response) => {
-        const dataRSS = parseData(response.data.contents);
-        dataRSS.feed.id = _.uniqueId();
-        dataRSS.feed.url = currentUrl;
-        dataRSS.posts.map((post) => {
-          const postId = post;
-          postId.id = _.uniqueId();
-          return postId;
-        });
-        watchState.form = { processState: 'loading', error: '' };
-        watchState.feeds.push(dataRSS.feed);
-        watchState.posts.unshift(...dataRSS.posts);
-        watchState.form = { processState: 'success', error: '' };
-      })
+          .catch((err) => {
+            watchState.form = { processState: 'failed', error: err.message };
 
-      .catch((err) => {
-        watchState.form = { processState: 'failed', error: err.message };
+            if (err.name === 'AxiosError') {
+              watchState.form = { processState: 'failed', error: 'network' };
+            }
+          });
+      });
 
-        if (err.name === 'AxiosError') {
-          watchState.form = { processState: 'failed', error: 'network' };
+      elements.posts.addEventListener('click', ({ target }) => {
+        const { id } = target.dataset;
+        watchState.idCurrentPost = id;
+        if (!watchState.idVisitedPosts.includes(id)) {
+          watchState.idVisitedPosts.push(id);
         }
       });
-  });
-
-  elements.posts.addEventListener('click', ({ target }) => {
-    const { id } = target.dataset;
-    watchState.idCurrentPost = id;
-    if (!watchState.idVisitedPosts.includes(id)) {
-      watchState.idVisitedPosts.push(id);
-    }
-  });
-  getUpdatePosts(watchState);
+      getUpdatePosts(watchState);
+    });
 };
 
 export default app;
