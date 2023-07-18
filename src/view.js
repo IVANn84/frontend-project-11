@@ -27,22 +27,25 @@ const handlerFormUrl = (elements, value, i18nInstance, initialState) => {
 
   clearData(elements);
   switch (step) {
-    case 'loading':
-      elements.input.disabled = true;
-      elements.button.disabled = true;
-      break;
-    case 'success':
-      elements.formFeedback.classList.add('text-success');
-      isFeedback.textContent = i18nInstance.t(`status.${step}`);
-      elements.form.reset();
-      elements.input.focus();
-      break;
+    // case 'loading':
+    // elements.input.disabled = true;
+    // elements.button.disabled = true;
+    // break;
+    // case 'success':
+    //   elements.formFeedback.classList.add('text-success');
+    //   isFeedback.textContent = i18nInstance.t(`status.${step}`);
+    //   elements.form.reset();
+    //   elements.input.focus();
+    //   break;
     case 'failed':
       elements.formFeedback.classList.add('text-danger');
       elements.input.classList.add('is-invalid');
+      console.log(`${[initialState.form.error]}`);
       isFeedback.textContent = i18nInstance.t(
         `errors.${[initialState.form.error]}`,
       );
+      elements.form.reset();
+      elements.input.focus();
       break;
     default:
       break;

@@ -7,21 +7,45 @@ import parseData from './parser.js';
 import ru from './locales/ru.js';
 import render from './view.js';
 
-const checkValidUrl = (url, urls) => {
-  const schema = yup
-    .string()
-    .required()
-    .notOneOf(urls, 'alreadyLoaded')
-    .url('invalidUrl');
-  return schema.validate(url);
-};
-
 const addProxi = (url) => {
   const result = new URL('https://allorigins.hexlet.app/get');
   result.searchParams.set('url', url);
   result.searchParams.set('disableCache', true);
 
   return result.toString();
+};
+
+const fetchRss = (url, watchState) => {
+  watchState.loadingProcess = { status: 'loading', errors: '' };
+  axios
+    .get(addProxi(url))
+    .then((response) => {
+      const dataRSS = parseData(response.data.contents);
+      dataRSS.feed.id = _.uniqueId();
+      dataRSS.feed.url = url;
+      dataRSS.posts.map((post) => {
+        const postId = post;
+        postId.id = _.uniqueId();
+        return postId;
+      });
+      watchState.feeds.push(dataRSS.feed);
+      watchState.posts.unshift(...dataRSS.posts);
+      watchState.loadingProcess = { status: 'success', error: '' };
+    })
+
+    .catch((err) => {
+      watchState.loadingProcess = {
+        processState: 'failed',
+        error: err.message,
+      };
+
+      if (err.name === 'AxiosError') {
+        watchState.loadingProcess = {
+          processState: 'failed',
+          error: 'network',
+        };
+      }
+    });
 };
 
 const getUpdatePosts = (state) => {
@@ -74,11 +98,27 @@ const app = () => {
           processState: 'filling',
           error: '',
         },
+        loadingProcess: {
+          status: 'idle',
+          error: '',
+        },
 
         feeds: [],
         posts: [],
 
         ui: { id: null, visitedPosts: new Set() },
+      };
+
+      const validateUrl = (url, urls) => {
+        const schema = yup
+          .string()
+          .required()
+          .notOneOf(urls, 'alreadyLoaded')
+          .url('invalidUrl');
+        return schema
+          .validate(url)
+          .then(() => null)
+          .catch((error) => error);
       };
 
       // View
@@ -87,7 +127,6 @@ const app = () => {
         initialState,
         render(elements, initialState, i18nInstance),
       );
-
       // ControLLer:
 
       elements.form.addEventListener('submit', (el) => {
@@ -96,30 +135,14 @@ const app = () => {
         const currentUrl = formData.get('url');
 
         const urls = initialState.feeds.map((feed) => feed.url);
-        checkValidUrl(currentUrl, urls)
-          .then((link) => axios.get(addProxi(link)))
-          .then((response) => {
-            const dataRSS = parseData(response.data.contents);
-            dataRSS.feed.id = _.uniqueId();
-            dataRSS.feed.url = currentUrl;
-            dataRSS.posts.map((post) => {
-              const postId = post;
-              postId.id = _.uniqueId();
-              return postId;
-            });
-            watchState.form = { processState: 'loading', error: '' };
-            watchState.feeds.push(dataRSS.feed);
-            watchState.posts.unshift(...dataRSS.posts);
-            watchState.form = { processState: 'success', error: '' };
-          })
-
-          .catch((err) => {
-            watchState.form = { processState: 'failed', error: err.message };
-
-            if (err.name === 'AxiosError') {
-              watchState.form = { processState: 'failed', error: 'network' };
-            }
-          });
+        validateUrl(currentUrl, urls).then((error) => {
+          if (error) {
+            console.log(watchState.form);
+            watchState.form = { status: 'failed', error: error.message };
+            console.log(watchState.form);
+          }
+          fetchRss(currentUrl, watchState);
+        });
       });
 
       elements.posts.addEventListener('click', ({ target }) => {
