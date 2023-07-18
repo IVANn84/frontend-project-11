@@ -127,6 +127,7 @@ const app = () => {
         initialState,
         render(elements, initialState, i18nInstance),
       );
+
       // ControLLer:
 
       elements.form.addEventListener('submit', (el) => {
@@ -137,9 +138,7 @@ const app = () => {
         const urls = initialState.feeds.map((feed) => feed.url);
         validateUrl(currentUrl, urls).then((error) => {
           if (error) {
-            console.log(watchState.form);
-            watchState.form = { status: 'failed', error: error.message };
-            console.log(watchState.form);
+            watchState.form = { processState: 'failed', error: error.message };
           }
           fetchRss(currentUrl, watchState);
         });

@@ -27,23 +27,44 @@ const handlerFormUrl = (elements, value, i18nInstance, initialState) => {
 
   clearData(elements);
   switch (step) {
-    // case 'loading':
-    // elements.input.disabled = true;
-    // elements.button.disabled = true;
-    // break;
-    // case 'success':
-    //   elements.formFeedback.classList.add('text-success');
-    //   isFeedback.textContent = i18nInstance.t(`status.${step}`);
-    //   elements.form.reset();
-    //   elements.input.focus();
-    //   break;
     case 'failed':
       elements.formFeedback.classList.add('text-danger');
       elements.input.classList.add('is-invalid');
-      console.log(`${[initialState.form.error]}`);
       isFeedback.textContent = i18nInstance.t(
         `errors.${[initialState.form.error]}`,
       );
+      elements.form.reset();
+      elements.input.focus();
+      break;
+    default:
+      break;
+  }
+};
+const handlerProcess = (elements, value, i18nInstance, initialState) => {
+  const { formFeedback: isFeedback } = elements;
+  const { status: process } = value;
+
+  clearData(elements);
+
+  switch (process) {
+    case 'loading':
+      elements.input.disabled = true;
+      elements.button.disabled = true;
+      break;
+    case 'success':
+      elements.formFeedback.classList.add('text-success');
+      isFeedback.textContent = i18nInstance.t(`status.${process}`);
+      elements.form.reset();
+      elements.input.focus();
+      break;
+    case 'failed':
+      elements.formFeedback.classList.add('text-danger');
+      elements.input.classList.add('is-invalid');
+
+      isFeedback.textContent = i18nInstance.t(
+        `errors.${[initialState.form.error]}`,
+      );
+
       elements.form.reset();
       elements.input.focus();
       break;
@@ -56,6 +77,9 @@ const render = (elements, initialState, i18nInstance) => (path, value) => {
   switch (path) {
     case 'form':
       handlerFormUrl(elements, value, i18nInstance, initialState);
+      break;
+    case 'loadingProcess':
+      handlerProcess(elements, value, i18nInstance);
       break;
     case 'feeds':
       renderFeeds(value, elements, i18nInstance);
