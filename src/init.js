@@ -35,13 +35,13 @@ const fetchRss = (url, watchState) => {
 
     .catch((err) => {
       watchState.loadingProcess = {
-        processState: 'failed',
+        status: 'failed',
         error: err.message,
       };
 
       if (err.name === 'AxiosError') {
         watchState.loadingProcess = {
-          processState: 'failed',
+          status: 'failed',
           error: 'network',
         };
       }
