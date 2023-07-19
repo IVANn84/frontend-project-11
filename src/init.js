@@ -38,7 +38,6 @@ const fetchRss = (url, watchState) => {
         status: 'failed',
         error: err.message,
       };
-
       if (err.name === 'AxiosError') {
         watchState.loadingProcess = {
           status: 'failed',
@@ -139,6 +138,7 @@ const app = () => {
         validateUrl(currentUrl, urls).then((error) => {
           if (error) {
             watchState.form = { processState: 'failed', error: error.message };
+            return;
           }
           fetchRss(currentUrl, watchState);
         });
