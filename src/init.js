@@ -8,7 +8,7 @@ import ru from './locales/ru.js';
 import render from './view.js';
 
 const addProxi = (url) => {
-  const result = new URL('https://allorigins.hexlet.app/get');
+  const result = new URL('/get', 'https://allorigins.hexlet.app');
   result.searchParams.set('url', url);
   result.searchParams.set('disableCache', true);
 
