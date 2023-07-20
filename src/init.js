@@ -12,7 +12,7 @@ const addProxi = (url) => {
   result.searchParams.set('url', url);
   result.searchParams.set('disableCache', true);
 
-  return result.toString();
+  return result;
 };
 
 const fetchRss = (url, watchState) => {
