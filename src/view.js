@@ -60,13 +60,11 @@ const handlerProcess = (elements, value, i18nInstance, initialState) => {
     case 'failed':
       elements.formFeedback.classList.add('text-danger');
       elements.input.classList.add('is-invalid');
+      // console.log(`errors.${[initialState.loadingProcess.error]}`);
 
       isFeedback.textContent = i18nInstance.t(
-        `errors.${[initialState.form.error]}`,
+        `errors.${[initialState.loadingProcess.error]}`,
       );
-
-      // elements.form.reset();
-      // elements.input.focus();
       break;
     default:
       break;

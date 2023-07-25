@@ -38,6 +38,7 @@ const fetchRss = (url, watchState) => {
         status: 'failed',
         error: err.message,
       };
+      console.log(watchState.loadingProcess);
       if (err.name === 'AxiosError') {
         watchState.loadingProcess = {
           status: 'failed',
