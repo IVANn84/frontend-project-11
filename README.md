@@ -16,8 +16,8 @@ A service for aggregating RSS feeds, with which it is convenient to read a varie
 ## **Sistem requirements:**
 
   ***Ubuntu Linux,***
-  ***Node.js***
-  ***Windows***
+  ***Node.js,***
+  ***Windows,***
   ***macOs***
 
 ## **Installation:**
