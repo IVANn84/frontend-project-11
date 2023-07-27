@@ -4,10 +4,10 @@ const parseData = (data) => {
 
   const errorNode = doc.querySelector('parsererror');
   if (errorNode) {
-    const err = new Error();
-    err.name = 'invalidRSS';
+    const error = new Error();
+    error.name = 'invalidRSS';
 
-    throw err;
+    throw error;
   }
   try {
     const feed = {
@@ -22,9 +22,9 @@ const parseData = (data) => {
       return { title, description, link };
     });
     return { feed, posts };
-  } catch (err) {
-    err.name = 'unableToParseData';
-    throw err;
+  } catch (error) {
+    error.name = 'unableToParseData';
+    throw error;
   }
 };
 

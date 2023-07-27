@@ -33,8 +33,6 @@ const handlerFormUrl = (elements, value, i18nInstance, initialState) => {
       isFeedback.textContent = i18nInstance.t(
         `errors.${[initialState.form.error]}`,
       );
-      // elements.form.reset();
-      // elements.input.focus();
       break;
     default:
       break;

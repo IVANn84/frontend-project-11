@@ -14,15 +14,14 @@ const addProxi = (url) => {
 
   return result.toString();
 };
-const getError = (err) => {
+const getError = (error) => {
   const maping = {
     AxiosError: 'network',
     invalidRSS: 'invalidRSS',
     unableToParseData: 'unableToParseData',
   };
-  const result = maping[err.name];
-  console.log(result);
-  return result;
+
+  return maping[error.name];
 };
 const fetchRss = (url, state) => {
   state.loadingProcess = { status: 'loading', error: '' };
@@ -68,8 +67,8 @@ const getUpdatePosts = (state) => {
       );
       state.posts = addedPosts.concat(...state.posts);
     })
-    .catch((err) => {
-      console.error(err);
+    .catch((error) => {
+      console.error(error);
     }));
 
   Promise.all(promises).finally(() => setTimeout(() => getUpdatePosts(state), 5000));
