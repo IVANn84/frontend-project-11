@@ -14,9 +14,18 @@ const addProxi = (url) => {
 
   return result.toString();
 };
-
-const fetchRss = (url, watchState) => {
-  watchState.loadingProcess = { status: 'loading', errors: '' };
+const getError = (err) => {
+  const maping = {
+    AxiosError: 'network',
+    invalidRSS: 'invalidRSS',
+    unableToParseData: 'unableToParseData',
+  };
+  const result = maping[err.name];
+  console.log(result);
+  return result;
+};
+const fetchRss = (url, state) => {
+  state.loadingProcess = { status: 'loading', error: '' };
   axios
     .get(addProxi(url))
     .then((response) => {
@@ -28,23 +37,16 @@ const fetchRss = (url, watchState) => {
         postId.id = _.uniqueId();
         return postId;
       });
-      watchState.feeds.push(dataRSS.feed);
-      watchState.posts.unshift(...dataRSS.posts);
-      watchState.loadingProcess = { status: 'success', error: '' };
+      state.feeds.push(dataRSS.feed);
+      state.posts.unshift(...dataRSS.posts);
+      state.loadingProcess = { status: 'success', error: '' };
     })
 
-    .catch((err) => {
-      watchState.loadingProcess = {
+    .catch((error) => {
+      state.loadingProcess = {
         status: 'failed',
-        error: err.message,
+        error: getError(error),
       };
-      console.log(watchState.loadingProcess);
-      if (err.name === 'AxiosError') {
-        watchState.loadingProcess = {
-          status: 'failed',
-          error: 'network',
-        };
-      }
     });
 };
 
@@ -72,17 +74,33 @@ const getUpdatePosts = (state) => {
 
   Promise.all(promises).finally(() => setTimeout(() => getUpdatePosts(state), 5000));
 };
-const elements = {
-  form: document.querySelector('.rss-form'),
-  input: document.getElementById('url-input'),
-  formFeedback: document.querySelector('.feedback'),
-  submitButton: document.querySelector('button[type="submit"]'),
-  feeds: document.querySelector('.feeds'),
-  posts: document.querySelector('.posts'),
-  button: document.querySelector('button'),
-};
 
 const app = () => {
+  const elements = {
+    form: document.querySelector('.rss-form'),
+    input: document.getElementById('url-input'),
+    formFeedback: document.querySelector('.feedback'),
+    submitButton: document.querySelector('button[type="submit"]'),
+    feeds: document.querySelector('.feeds'),
+    posts: document.querySelector('.posts'),
+    button: document.querySelector('button'),
+  };
+  const initialState = {
+    form: {
+      processState: 'filling',
+      error: '',
+    },
+    loadingProcess: {
+      status: 'idle',
+      error: '',
+    },
+
+    feeds: [],
+    posts: [],
+
+    ui: { id: null, visitedPosts: new Set() },
+  };
+
   const i18nInstance = i18next.createInstance();
   i18nInstance
     .init({
@@ -93,22 +111,6 @@ const app = () => {
       },
     })
     .then(() => {
-      const initialState = {
-        form: {
-          processState: 'filling',
-          error: '',
-        },
-        loadingProcess: {
-          status: 'idle',
-          error: '',
-        },
-
-        feeds: [],
-        posts: [],
-
-        ui: { id: null, visitedPosts: new Set() },
-      };
-
       const validateUrl = (url, urls) => {
         const schema = yup
           .string()

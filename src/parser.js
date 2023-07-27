@@ -5,8 +5,8 @@ const parseData = (data) => {
   const errorNode = doc.querySelector('parsererror');
   if (errorNode) {
     const err = new Error();
-    err.name = errorNode.textContent;
-    err.message = 'invalidRSS';
+    err.name = 'invalidRSS';
+
     throw err;
   }
   try {
@@ -23,7 +23,7 @@ const parseData = (data) => {
     });
     return { feed, posts };
   } catch (err) {
-    err.message = 'unableToParseData';
+    err.name = 'unableToParseData';
     throw err;
   }
 };
