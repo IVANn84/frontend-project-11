@@ -46,9 +46,6 @@ const handlerProcess = (elements, value, i18nInstance, initialState) => {
 
   clearData(elements);
 
-  // const x = `${initialState.loadingProcess.error}`;
-  // console.log(x);
-
   switch (process) {
     case 'loading':
       elements.input.disabled = true;
@@ -79,7 +76,7 @@ const render = (elements, initialState, i18nInstance) => (path, value) => {
       handlerFormUrl(elements, value, i18nInstance, initialState);
       break;
     case 'loadingProcess':
-      handlerProcess(elements, value, i18nInstance);
+      handlerProcess(elements, value, i18nInstance, initialState);
       break;
     case 'feeds':
       renderFeeds(value, elements, i18nInstance);
