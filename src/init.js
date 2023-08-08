@@ -8,20 +8,20 @@ import ru from './locales/ru.js';
 import render from './view.js';
 
 const addProxi = (url) => {
-  const result = new URL('/get', 'https://allorigins.hexlet.app');
-  result.searchParams.set('url', url);
-  result.searchParams.set('disableCache', true);
+  const proxyUrl = new URL('/get', 'https://allorigins.hexlet.app');
+  proxyUrl.searchParams.set('url', url);
+  proxyUrl.searchParams.set('disableCache', true);
 
-  return result.toString();
+  return proxyUrl.toString();
 };
 const getError = (error) => {
   const maping = {
     AxiosError: 'network',
-    invalidRSS: 'invalidRSS',
-    unableToParseData: 'unableToParseData',
+    ParserError: 'invalidRSS',
+    // unableToParseData: 'unableToParseData',
   };
 
-  return maping[error.name];
+  return maping[error.name] || 'unknown';
 };
 const fetchRss = (url, state) => {
   state.loadingProcess = { status: 'loading', error: '' };
