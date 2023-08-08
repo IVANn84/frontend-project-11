@@ -14,15 +14,28 @@ const addProxi = (url) => {
 
   return proxyUrl.toString();
 };
+
 const getError = (error) => {
   const maping = {
     AxiosError: 'network',
     ParserError: 'invalidRSS',
-    // unableToParseData: 'unableToParseData',
   };
 
   return maping[error.name] || 'unknown';
 };
+
+const validateUrl = (url, urls) => {
+  const schema = yup
+    .string()
+    .required()
+    .notOneOf(urls, 'alreadyLoaded')
+    .url('invalidUrl');
+  return schema
+    .validate(url)
+    .then(() => null)
+    .catch((error) => error);
+};
+
 const fetchRss = (url, state) => {
   state.loadingProcess = { status: 'loading', error: '' };
   axios
@@ -40,7 +53,6 @@ const fetchRss = (url, state) => {
       state.posts.unshift(...dataRSS.posts);
       state.loadingProcess = { status: 'success', error: '' };
     })
-
     .catch((error) => {
       state.loadingProcess = {
         status: 'failed',
@@ -108,26 +120,10 @@ const app = () => {
       },
     })
     .then(() => {
-      const validateUrl = (url, urls) => {
-        const schema = yup
-          .string()
-          .required()
-          .notOneOf(urls, 'alreadyLoaded')
-          .url('invalidUrl');
-        return schema
-          .validate(url)
-          .then(() => null)
-          .catch((error) => error);
-      };
-
-      // View
-
-      const watchState = onChange(
+      const watchedState = onChange(
         initialState,
         render(elements, initialState, i18nInstance),
       );
-
-      // ControLLer:
 
       elements.form.addEventListener('submit', (el) => {
         el.preventDefault();
@@ -137,19 +133,19 @@ const app = () => {
         const urls = initialState.feeds.map((feed) => feed.url);
         validateUrl(currentUrl, urls).then((error) => {
           if (error) {
-            watchState.form = { processState: 'failed', error: error.message };
+            watchedState.form = { processState: 'failed', error: error.message };
             return;
           }
-          fetchRss(currentUrl, watchState);
+          fetchRss(currentUrl, watchedState);
         });
       });
 
       elements.posts.addEventListener('click', ({ target }) => {
         const { id } = target.dataset;
-        watchState.ui.id = id;
-        watchState.ui.visitedPosts.add(id);
+        watchedState.ui.id = id;
+        watchedState.ui.visitedPosts.add(id);
       });
-      getUpdatePosts(watchState);
+      getUpdatePosts(watchedState);
     });
 };
 
