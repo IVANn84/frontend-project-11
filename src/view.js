@@ -8,6 +8,7 @@ const clearData = (elements) => {
   formFeedback.classList.remove('text-success');
 
   input.classList.remove('is-invalid');
+  formFeedback.textContent = '';
 
   input.disabled = false;
   button.disabled = false;
