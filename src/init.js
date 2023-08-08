@@ -93,10 +93,8 @@ const app = () => {
       status: 'idle',
       error: '',
     },
-
     feeds: [],
     posts: [],
-
     ui: { id: null, visitedPosts: new Set() },
   };
 
