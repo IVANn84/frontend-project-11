@@ -98,7 +98,8 @@ const app = () => {
   };
   const initialState = {
     form: {
-      processState: 'filling',
+      // processState: 'filling',
+      isValid: true,
       error: '',
     },
     loadingProcess: {
@@ -133,7 +134,10 @@ const app = () => {
         const urls = initialState.feeds.map((feed) => feed.url);
         validateUrl(currentUrl, urls).then((error) => {
           if (error) {
-            watchedState.form = { processState: 'failed', error: error.message };
+            watchedState.form = {
+              isValid: false,
+              error: error.message,
+            };
             return;
           }
           fetchRss(currentUrl, watchedState);

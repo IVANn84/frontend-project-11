@@ -24,11 +24,11 @@ const renderVisitedPosts = (idVisitedPosts) => {
 
 const handlerFormUrl = (elements, value, i18nInstance, initialState) => {
   const { formFeedback: isFeedback } = elements;
-  const { processState: step } = value;
+  const { isValid: step } = value;
 
   clearData(elements);
   switch (step) {
-    case 'failed':
+    case false:
       elements.formFeedback.classList.add('text-danger');
       elements.input.classList.add('is-invalid');
       isFeedback.textContent = i18nInstance.t(
