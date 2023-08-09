@@ -4,7 +4,7 @@ import i18next from 'i18next';
 import axios from 'axios';
 import _ from 'lodash';
 import parseData from './parser.js';
-import ru from './locales/ru.js';
+import resources from './locales/ru.js';
 import render from './view.js';
 
 const addProxi = (url) => {
@@ -96,9 +96,9 @@ const app = () => {
     posts: document.querySelector('.posts'),
     button: document.querySelector('button'),
   };
+
   const initialState = {
     form: {
-      // processState: 'filling',
       isValid: true,
       error: '',
     },
@@ -116,9 +116,7 @@ const app = () => {
     .init({
       lng: 'ru',
       debug: true,
-      resources: {
-        ru,
-      },
+      resources,
     })
     .then(() => {
       const watchedState = onChange(

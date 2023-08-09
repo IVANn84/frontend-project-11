@@ -22,18 +22,16 @@ const renderVisitedPosts = (idVisitedPosts) => {
   });
 };
 
-const handlerFormUrl = (elements, value, i18nInstance, initialState) => {
+const handlerFormUrl = (elements, value, i18nInstance) => {
   const { formFeedback: isFeedback } = elements;
-  const { isValid: step } = value;
+  const { isValid, error } = value;
 
   clearData(elements);
-  switch (step) {
+  switch (isValid) {
     case false:
       elements.formFeedback.classList.add('text-danger');
       elements.input.classList.add('is-invalid');
-      isFeedback.textContent = i18nInstance.t(
-        `errors.${[initialState.form.error]}`,
-      );
+      isFeedback.textContent = i18nInstance.t(`errors.${[error]}`);
       break;
     default:
       break;
@@ -42,6 +40,7 @@ const handlerFormUrl = (elements, value, i18nInstance, initialState) => {
 const handlerProcess = (elements, value, i18nInstance, initialState) => {
   const { formFeedback: isFeedback } = elements;
   const { status: process } = value;
+  console.log(value);
 
   clearData(elements);
 
@@ -52,7 +51,7 @@ const handlerProcess = (elements, value, i18nInstance, initialState) => {
       break;
     case 'success':
       elements.formFeedback.classList.add('text-success');
-      isFeedback.textContent = i18nInstance.t(`status.${process}`);
+      isFeedback.textContent = i18nInstance.t('success');
       elements.form.reset();
       elements.input.focus();
       break;
@@ -61,7 +60,7 @@ const handlerProcess = (elements, value, i18nInstance, initialState) => {
       elements.input.classList.add('is-invalid');
 
       isFeedback.textContent = i18nInstance.t(
-        `errors.${[initialState.loadingProcess.error]}`,
+        initialState.loadingProcess.error,
       );
       break;
     default:
@@ -72,7 +71,7 @@ const handlerProcess = (elements, value, i18nInstance, initialState) => {
 const render = (elements, initialState, i18nInstance) => (path, value) => {
   switch (path) {
     case 'form':
-      handlerFormUrl(elements, value, i18nInstance, initialState);
+      handlerFormUrl(elements, value, i18nInstance);
       break;
     case 'loadingProcess':
       handlerProcess(elements, value, i18nInstance, initialState);
