@@ -66,29 +66,24 @@ const getUpdatePosts = (state) => {
     return;
   }
   const urls = state.feeds.map((feed) => feed.url);
-  const promises = urls.map((url) =>
-    axios
-      .get(addProxi(url))
-      .then((response) => {
-        const data = parseData(response.data.contents);
+  const promises = urls.map((url) => axios
+    .get(addProxi(url))
+    .then((response) => {
+      const data = parseData(response.data.contents);
 
-        const comparator = (arrayValue, otherValue) =>
-          arrayValue.title === otherValue.title;
-        const addedPosts = _.differenceWith(
-          data.items,
-          state.posts,
-          comparator
-        );
-        state.posts = addedPosts.concat(...state.posts);
-      })
-      .catch((error) => {
-        console.error(error);
-      })
-  );
+      const comparator = (arrayValue, otherValue) => arrayValue.title === otherValue.title;
+      const addedPosts = _.differenceWith(
+        data.items,
+        state.posts,
+        comparator,
+      );
+      state.posts = addedPosts.concat(...state.posts);
+    })
+    .catch((error) => {
+      console.error(error);
+    }));
 
-  Promise.all(promises).finally(() =>
-    setTimeout(() => getUpdatePosts(state), 5000)
-  );
+  Promise.all(promises).finally(() => setTimeout(() => getUpdatePosts(state), 5000));
 };
 
 const app = () => {
@@ -126,7 +121,7 @@ const app = () => {
     .then(() => {
       const watchedState = onChange(
         initialState,
-        render(elements, initialState, i18nInstance)
+        render(elements, initialState, i18nInstance),
       );
 
       elements.form.addEventListener('submit', (el) => {
