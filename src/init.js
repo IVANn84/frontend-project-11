@@ -4,7 +4,7 @@ import i18next from 'i18next';
 import axios from 'axios';
 import _ from 'lodash';
 import parseData from './parser.js';
-import resources from './locales/ru.js';
+import resources from './locales/index.js';
 import render from './view.js';
 
 const addProxi = (url) => {

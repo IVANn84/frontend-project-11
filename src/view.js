@@ -37,21 +37,21 @@ const handlerFormUrl = (elements, value, i18nInstance) => {
       break;
   }
 };
-const handlerProcess = (elements, value, i18nInstance, initialState) => {
+const handlerProcess = (elements, value, i18nInstance) => {
   const { formFeedback: isFeedback } = elements;
-  const { status: process } = value;
+  const { status, error } = value;
   console.log(value);
 
   clearData(elements);
 
-  switch (process) {
+  switch (status) {
     case 'loading':
       elements.input.disabled = true;
       elements.button.disabled = true;
       break;
     case 'success':
       elements.formFeedback.classList.add('text-success');
-      isFeedback.textContent = i18nInstance.t('success');
+      isFeedback.textContent = i18nInstance.t(`status.${status}`);
       elements.form.reset();
       elements.input.focus();
       break;
@@ -59,9 +59,7 @@ const handlerProcess = (elements, value, i18nInstance, initialState) => {
       elements.formFeedback.classList.add('text-danger');
       elements.input.classList.add('is-invalid');
 
-      isFeedback.textContent = i18nInstance.t(
-        initialState.loadingProcess.error,
-      );
+      isFeedback.textContent = i18nInstance.t(`errors.${[error]}`);
       break;
     default:
       break;
@@ -74,7 +72,7 @@ const render = (elements, initialState, i18nInstance) => (path, value) => {
       handlerFormUrl(elements, value, i18nInstance);
       break;
     case 'loadingProcess':
-      handlerProcess(elements, value, i18nInstance, initialState);
+      handlerProcess(elements, value, i18nInstance);
       break;
     case 'feeds':
       renderFeeds(value, elements, i18nInstance);
