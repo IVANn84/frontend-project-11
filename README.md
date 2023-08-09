@@ -13,13 +13,6 @@
 ## **Description:**
 A service for aggregating RSS feeds, with which it is convenient to read a variety of sources, such as blogs. It allows you to add an unlimited number of RSS feeds, updates them itself and adds new entries to the general feed.
 
-## **Sistem requirements:**
-
-  ***Ubuntu Linux,***
-  ***Node.js,***
-  ***Windows,***
-  ***macOs***
-
 ## **Installation:**
 1. Clone the project
 2. Install dependencies
