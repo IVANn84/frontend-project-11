@@ -1,11 +1,10 @@
 import * as yup from 'yup';
-import onChange from 'on-change';
 import i18next from 'i18next';
 import axios from 'axios';
 import _ from 'lodash';
 import parseData from './parser.js';
 import resources from './locales/index.js';
-import render from './view.js';
+import wath from './view.js';
 
 const addProxi = (url) => {
   const proxyUrl = new URL('/get', 'https://allorigins.hexlet.app');
@@ -119,10 +118,7 @@ const app = () => {
       resources,
     })
     .then(() => {
-      const watchedState = onChange(
-        initialState,
-        render(elements, initialState, i18nInstance),
-      );
+      const watchedState = wath(initialState, elements, i18nInstance);
 
       elements.form.addEventListener('submit', (el) => {
         el.preventDefault();

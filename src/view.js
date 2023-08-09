@@ -1,3 +1,4 @@
+import onChange from 'on-change';
 import renderModal from './renderModal.js';
 import renderFeeds from './renderFeeds.js';
 import renderPosts from './renderPosts.js';
@@ -68,7 +69,7 @@ const handlerProcess = (elements, value, i18nInstance) => {
   }
 };
 
-const render = (elements, initialState, i18nInstance) => (path, value) => {
+const wath = (state, elements, i18nInstance) => onChange(state, (path, value) => {
   switch (path) {
     case 'form':
       handlerFormUrl(elements, value, i18nInstance);
@@ -80,17 +81,16 @@ const render = (elements, initialState, i18nInstance) => (path, value) => {
       renderFeeds(value, elements, i18nInstance);
       break;
     case 'posts':
-      renderPosts(initialState, value, elements, i18nInstance);
+      renderPosts(state, value, elements, i18nInstance);
       break;
     case 'ui.visitedPosts':
       renderVisitedPosts(value);
       break;
     case 'ui.id':
-      renderModal(initialState, value);
+      renderModal(state, value);
       break;
     default:
       break;
   }
-};
-
-export default render;
+});
+export default wath;
