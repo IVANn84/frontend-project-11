@@ -31,16 +31,18 @@ const handlerFormUrl = (elements, value, i18nInstance) => {
     case false:
       elements.formFeedback.classList.add('text-danger');
       elements.input.classList.add('is-invalid');
-      isFeedback.textContent = i18nInstance.t(`errors.${[error]}`);
+      isFeedback.textContent = i18nInstance.t(`errors.${error}`);
+      break;
+    case true:
       break;
     default:
       break;
   }
 };
+
 const handlerProcess = (elements, value, i18nInstance) => {
   const { formFeedback: isFeedback } = elements;
   const { status, error } = value;
-  console.log(value);
 
   clearData(elements);
 
@@ -59,7 +61,7 @@ const handlerProcess = (elements, value, i18nInstance) => {
       elements.formFeedback.classList.add('text-danger');
       elements.input.classList.add('is-invalid');
 
-      isFeedback.textContent = i18nInstance.t(`errors.${[error]}`);
+      isFeedback.textContent = i18nInstance.t(`errors.${error}`);
       break;
     default:
       break;
