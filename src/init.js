@@ -7,6 +7,7 @@ import resources from './locales/index.js';
 import watch from './view.js';
 
 const TIMEOUT = 10000;
+const UPDATE_TIME = 5000;
 
 const addProxi = (url) => {
   const proxyUrl = new URL('/get', 'https://allorigins.hexlet.app');
@@ -61,18 +62,18 @@ const fetchRss = (url, state) => {
 };
 
 const getUpdatePosts = (state) => {
-  if (state.posts.length === 0) {
-    return;
-  }
   const urls = state.feeds.map((feed) => feed.url);
+  // Скорее всего, нет необходимости дополнительно извлекать пути.
+  // И еще нам потребуется id фида для отсечения только его постов
+  // const promises = state.feeds.map(({ url, id }) => axios
   const promises = urls.map((url) => axios
-    .get(addProxi(url))
+    .get(addProxi(url), { timeout: TIMEOUT })
     .then((response) => {
-      const data = parseData(response.data.contents);
+      const dataRSS = parseData(response.data.contents);
 
       const comparator = (arrayValue, otherValue) => arrayValue.title === otherValue.title;
       const addedPosts = _.differenceWith(
-        data.items,
+        dataRSS.items,
         state.posts,
         comparator,
       );
@@ -82,7 +83,7 @@ const getUpdatePosts = (state) => {
       console.error(error);
     }));
 
-  Promise.all(promises).finally(() => setTimeout(() => getUpdatePosts(state), 5000));
+  Promise.all(promises).finally(() => setTimeout(() => getUpdatePosts(state), UPDATE_TIME));
 };
 
 const app = () => {
@@ -140,6 +141,7 @@ const app = () => {
       });
 
       elements.posts.addEventListener('click', ({ target }) => {
+        // console.log(e);
         const { id } = target.dataset;
         watchedState.ui.id = id;
         watchedState.ui.visitedPosts.add(id);
@@ -148,4 +150,8 @@ const app = () => {
     });
 };
 
+//  if (e.target.hasAttribute('data-id')) {
+//         wathcedState.visitedPostsId.add(e.target.dataset.id);
+//         wathcedState.currentPost = wathcedState.posts.find(
+//           (post) => post.id === e.target.dataset.id,
 export default app;
