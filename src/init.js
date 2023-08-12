@@ -4,7 +4,9 @@ import axios from 'axios';
 import _ from 'lodash';
 import parseData from './parser.js';
 import resources from './locales/index.js';
-import wath from './view.js';
+import watch from './view.js';
+
+const TIMEOUT = 10000;
 
 const addProxi = (url) => {
   const proxyUrl = new URL('/get', 'https://allorigins.hexlet.app');
@@ -38,15 +40,13 @@ const validateUrl = (url, urls) => {
 const fetchRss = (url, state) => {
   state.loadingProcess = { status: 'loading', error: '' };
   axios
-    .get(addProxi(url))
+    .get(addProxi(url), { timeout: TIMEOUT })
     .then((response) => {
       const dataRSS = parseData(response.data.contents);
       dataRSS.feed.id = _.uniqueId();
       dataRSS.feed.url = url;
-      dataRSS.posts.map((post) => {
-        const postId = post;
-        postId.id = _.uniqueId();
-        return postId;
+      dataRSS.posts.forEach((post) => {
+        post.id = _.uniqueId();
       });
       state.feeds.push(dataRSS.feed);
       state.posts.unshift(...dataRSS.posts);
@@ -118,7 +118,7 @@ const app = () => {
       resources,
     })
     .then(() => {
-      const watchedState = wath(initialState, elements, i18nInstance);
+      const watchedState = watch(initialState, elements, i18nInstance);
 
       elements.form.addEventListener('submit', (el) => {
         el.preventDefault();

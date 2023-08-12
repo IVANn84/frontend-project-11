@@ -69,7 +69,7 @@ const handlerProcess = (elements, value, i18nInstance) => {
   }
 };
 
-const wath = (state, elements, i18nInstance) => onChange(state, (path, value) => {
+const watch = (state, elements, i18nInstance) => onChange(state, (path, value) => {
   switch (path) {
     case 'form':
       handlerFormUrl(elements, value, i18nInstance);
@@ -93,4 +93,4 @@ const wath = (state, elements, i18nInstance) => onChange(state, (path, value) =>
       break;
   }
 });
-export default wath;
+export default watch;
