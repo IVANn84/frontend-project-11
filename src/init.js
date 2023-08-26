@@ -141,17 +141,14 @@ const app = () => {
       });
 
       elements.posts.addEventListener('click', ({ target }) => {
-        // console.log(e);
-        const { id } = target.dataset;
-        watchedState.ui.id = id;
-        watchedState.ui.visitedPosts.add(id);
+        if (target.dataset.id) {
+          const { id } = target.dataset;
+          watchedState.ui.id = id;
+          watchedState.ui.visitedPosts.add(id);
+        }
       });
       getUpdatePosts(watchedState);
     });
 };
 
-//  if (e.target.hasAttribute('data-id')) {
-//         wathcedState.visitedPostsId.add(e.target.dataset.id);
-//         wathcedState.currentPost = wathcedState.posts.find(
-//           (post) => post.id === e.target.dataset.id,
 export default app;
