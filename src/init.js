@@ -51,6 +51,7 @@ const fetchRss = (url, state) => {
       });
       state.feeds.push(dataRSS.feed);
       state.posts.unshift(...dataRSS.posts);
+      console.log(state);
       state.loadingProcess = { status: 'success', error: '' };
     })
     .catch((error) => {
@@ -62,20 +63,16 @@ const fetchRss = (url, state) => {
 };
 
 const getUpdatePosts = (state) => {
-  const urls = state.feeds.map((feed) => feed.url);
-  // Скорее всего, нет необходимости дополнительно извлекать пути.
   // И еще нам потребуется id фида для отсечения только его постов
   // const promises = state.feeds.map(({ url, id }) => axios
-  const promises = urls.map((url) => axios
+  const promises = state.posts.map(({ url, id }) => axios
     .get(addProxi(url), { timeout: TIMEOUT })
     .then((response) => {
-      const dataRSS = parseData(response.data.contents);
+      const oldPosts = state.posts;
+      const newPosts = parseData(response.data.contents);
 
-      const comparator = (arrayValue, otherValue) => arrayValue.title === otherValue.title;
-      const addedPosts = _.differenceWith(
-        dataRSS.items,
-        state.posts,
-        comparator,
+      const addedPosts = _.differenceBy(newPosts, oldPosts, 'link').map(
+        (post) => ({ ...post, channelId: id, id: _.uniqueId() }),
       );
       state.posts = addedPosts.concat(...state.posts);
     })
