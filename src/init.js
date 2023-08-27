@@ -48,6 +48,10 @@ const fetchRss = (url, state) => {
       dataRSS.feed.url = url;
       dataRSS.posts.forEach((post) => {
         post.id = _.uniqueId();
+        post.channelId = dataRSS.feed.id;
+      });
+      dataRSS.posts.forEach((post) => {
+        post.channelId = dataRSS.feed.id;
       });
       state.feeds.push(dataRSS.feed);
       state.posts.unshift(...dataRSS.posts);
@@ -63,8 +67,6 @@ const fetchRss = (url, state) => {
 };
 
 const getUpdatePosts = (state) => {
-  // И еще нам потребуется id фида для отсечения только его постов
-  // const promises = state.feeds.map(({ url, id }) => axios
   const promises = state.posts.map(({ url, id }) => axios
     .get(addProxi(url), { timeout: TIMEOUT })
     .then((response) => {
