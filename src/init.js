@@ -92,7 +92,7 @@ const app = () => {
     submit: document.querySelector('button[type="submit"]'),
     feeds: document.querySelector('.feeds'),
     posts: document.querySelector('.posts'),
-    button: document.querySelector('button'),
+    button: document.querySelector('.rss-form button[type="submit"]'),
   };
 
   const initialState = {

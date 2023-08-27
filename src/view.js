@@ -35,6 +35,7 @@ const handlerFormUrl = (elements, value, i18nInstance) => {
       isFeedback.textContent = i18nInstance.t(`errors.${error}`);
       break;
     case true:
+      isFeedback.textContent = '';
       break;
     default:
       break;
