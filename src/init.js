@@ -9,7 +9,7 @@ import watch from './view.js';
 const TIMEOUT = 10000;
 const UPDATE_TIME = 5000;
 
-const addProxi = (url) => {
+const addProxy = (url) => {
   const proxyUrl = new URL('/get', 'https://allorigins.hexlet.app');
   proxyUrl.searchParams.set('url', url);
   proxyUrl.searchParams.set('disableCache', true);
@@ -41,17 +41,14 @@ const validateUrl = (url, urls) => {
 const fetchRss = (url, state) => {
   state.loadingProcess = { status: 'loading', error: '' };
   axios
-    .get(addProxi(url), { timeout: TIMEOUT })
+    .get(addProxy(url), { timeout: TIMEOUT })
     .then((response) => {
       const dataRSS = parseData(response.data.contents);
       dataRSS.feed.id = _.uniqueId();
       dataRSS.feed.url = url;
       dataRSS.posts.forEach((post) => {
+        post.channelId = dataRSS.feed.id;
         post.id = _.uniqueId();
-        post.channelId = dataRSS.feed.id;
-      });
-      dataRSS.posts.forEach((post) => {
-        post.channelId = dataRSS.feed.id;
       });
       state.feeds.push(dataRSS.feed);
       state.posts.unshift(...dataRSS.posts);
@@ -67,16 +64,18 @@ const fetchRss = (url, state) => {
 };
 
 const getUpdatePosts = (state) => {
-  const promises = state.posts.map(({ url, id }) => axios
-    .get(addProxi(url), { timeout: TIMEOUT })
+  const promises = state.feeds.map(({ url, id }) => axios.get(addProxy(url), { timeout: TIMEOUT })
     .then((response) => {
       const oldPosts = state.posts;
-      const newPosts = parseData(response.data.contents);
+      const { posts: newPosts } = parseData(response.data.contents);
+      const posts = _.differenceBy(newPosts, oldPosts, 'link')
+        .map((post) => ({
+          ...post,
+          channelId: id,
+          id: _.uniqueId(),
+        }));
 
-      const addedPosts = _.differenceBy(newPosts, oldPosts, 'link').map(
-        (post) => ({ ...post, channelId: id, id: _.uniqueId() }),
-      );
-      state.posts = addedPosts.concat(...state.posts);
+      state.posts = posts.concat(...state.posts);
     })
     .catch((error) => {
       console.error(error);
@@ -89,8 +88,8 @@ const app = () => {
   const elements = {
     form: document.querySelector('.rss-form'),
     input: document.getElementById('url-input'),
-    formFeedback: document.querySelector('.feedback'),
-    submitButton: document.querySelector('button[type="submit"]'),
+    feedback: document.querySelector('.feedback'),
+    submit: document.querySelector('button[type="submit"]'),
     feeds: document.querySelector('.feeds'),
     posts: document.querySelector('.posts'),
     button: document.querySelector('button'),

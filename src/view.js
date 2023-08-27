@@ -4,12 +4,12 @@ import renderFeeds from './renderFeeds.js';
 import renderPosts from './renderPosts.js';
 
 const clearData = (elements) => {
-  const { input, formFeedback, button } = elements;
-  formFeedback.classList.remove('text-danger');
-  formFeedback.classList.remove('text-success');
+  const { input, feedback, button } = elements;
+  feedback.classList.remove('text-danger');
+  feedback.classList.remove('text-success');
 
   input.classList.remove('is-invalid');
-  formFeedback.textContent = '';
+  feedback.textContent = '';
 
   input.disabled = false;
   button.disabled = false;
@@ -24,13 +24,13 @@ const renderVisitedPosts = (idVisitedPosts) => {
 };
 
 const handlerFormUrl = (elements, value, i18nInstance) => {
-  const { formFeedback: isFeedback } = elements;
+  const { feedback: isFeedback } = elements;
   const { isValid, error } = value;
 
   clearData(elements);
   switch (isValid) {
     case false:
-      elements.formFeedback.classList.add('text-danger');
+      elements.feedback.classList.add('text-danger');
       elements.input.classList.add('is-invalid');
       isFeedback.textContent = i18nInstance.t(`errors.${error}`);
       break;
@@ -42,7 +42,7 @@ const handlerFormUrl = (elements, value, i18nInstance) => {
 };
 
 const handlerProcess = (elements, value, i18nInstance) => {
-  const { formFeedback: isFeedback } = elements;
+  const { feedback: isFeedback } = elements;
   const { status, error } = value;
 
   clearData(elements);
@@ -53,13 +53,13 @@ const handlerProcess = (elements, value, i18nInstance) => {
       elements.button.disabled = true;
       break;
     case 'success':
-      elements.formFeedback.classList.add('text-success');
+      elements.feedback.classList.add('text-success');
       isFeedback.textContent = i18nInstance.t(`status.${status}`);
       elements.form.reset();
       elements.input.focus();
       break;
     case 'failed':
-      elements.formFeedback.classList.add('text-danger');
+      elements.feedback.classList.add('text-danger');
       elements.input.classList.add('is-invalid');
 
       isFeedback.textContent = i18nInstance.t(`errors.${error}`);
