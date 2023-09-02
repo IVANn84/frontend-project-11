@@ -3,17 +3,6 @@ import renderModal from './renderModal.js';
 import renderFeeds from './renderFeeds.js';
 import renderPosts from './renderPosts.js';
 
-const clearData = (elements) => {
-  const { input, button } = elements;
-  // feedback.classList.remove('text-danger');
-  // feedback.classList.remove('text-success');
-
-  // input.classList.remove('is-invalid');
-
-  input.disabled = false;
-  button.disabled = false;
-};
-
 const renderVisitedPosts = (idVisitedPosts) => {
   idVisitedPosts.forEach((id) => {
     const link = document.querySelector(`a[data-id="${id}"]`);
@@ -23,10 +12,12 @@ const renderVisitedPosts = (idVisitedPosts) => {
 };
 
 const handlerFormUrl = (elements, value, i18nInstance) => {
-  const { input, feedback } = elements;
+  const { input, feedback, button } = elements;
   const { isValid, error } = value;
 
-  clearData(elements);
+  input.disabled = false;
+  button.disabled = false;
+
   if (!isValid) {
     feedback.classList.add('text-danger');
     input.classList.add('is-invalid');
@@ -42,8 +33,6 @@ const handlerFormUrl = (elements, value, i18nInstance) => {
 const handlerProcess = (elements, value, i18nInstance) => {
   const { feedback: isFeedback } = elements;
   const { status, error } = value;
-
-  clearData(elements);
 
   switch (status) {
     case 'loading':
