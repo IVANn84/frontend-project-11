@@ -119,9 +119,9 @@ const app = () => {
     .then(() => {
       const watchedState = watch(initialState, elements, i18nInstance);
 
-      elements.form.addEventListener('submit', (el) => {
-        el.preventDefault();
-        const formData = new FormData(el.target);
+      elements.form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const formData = new FormData(event.target);
         const currentUrl = formData.get('url');
 
         const urls = initialState.feeds.map((feed) => feed.url);
