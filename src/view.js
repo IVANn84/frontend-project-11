@@ -4,12 +4,11 @@ import renderFeeds from './renderFeeds.js';
 import renderPosts from './renderPosts.js';
 
 const clearData = (elements) => {
-  const { input, feedback, button } = elements;
-  feedback.classList.remove('text-danger');
-  feedback.classList.remove('text-success');
+  const { input, button } = elements;
+  // feedback.classList.remove('text-danger');
+  // feedback.classList.remove('text-success');
 
-  input.classList.remove('is-invalid');
-  feedback.textContent = '';
+  // input.classList.remove('is-invalid');
 
   input.disabled = false;
   button.disabled = false;
@@ -33,6 +32,9 @@ const handlerFormUrl = (elements, value, i18nInstance) => {
     input.classList.add('is-invalid');
     feedback.textContent = i18nInstance.t(`errors.${error}`);
   } else {
+    feedback.classList.remove('text-danger');
+    feedback.classList.remove('text-success');
+    input.classList.remove('is-invalid');
     feedback.textContent = '';
   }
 };
