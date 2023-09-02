@@ -24,16 +24,16 @@ const renderVisitedPosts = (idVisitedPosts) => {
 };
 
 const handlerFormUrl = (elements, value, i18nInstance) => {
-  const { feedback: isFeedback } = elements;
+  const { input, feedback } = elements;
   const { isValid, error } = value;
 
   clearData(elements);
   if (!isValid) {
-    elements.feedback.classList.add('text-danger');
-    elements.input.classList.add('is-invalid');
-    isFeedback.textContent = i18nInstance.t(`errors.${error}`);
+    feedback.classList.add('text-danger');
+    input.classList.add('is-invalid');
+    feedback.textContent = i18nInstance.t(`errors.${error}`);
   } else {
-    isFeedback.textContent = '';
+    feedback.textContent = '';
   }
 };
 
