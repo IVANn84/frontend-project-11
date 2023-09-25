@@ -9,6 +9,7 @@ const clearData = (elements) => {
   feedback.classList.remove('text-success');
 
   input.classList.remove('is-invalid');
+  feedback.textContent = '';
 
   input.disabled = false;
   button.disabled = false;
@@ -23,21 +24,29 @@ const renderVisitedPosts = (idVisitedPosts) => {
 };
 
 const handlerFormUrl = (elements, value, i18nInstance) => {
-  const { input, feedback } = elements;
+  const { feedback: isFeedback } = elements;
   const { isValid, error } = value;
+
   clearData(elements);
-  if (!isValid) {
-    feedback.classList.add('text-danger');
-    input.classList.add('is-invalid');
-    feedback.textContent = i18nInstance.t(`errors.${error}`);
-  } else {
-    feedback.textContent = '';
+  switch (isValid) {
+    case false:
+      elements.feedback.classList.add('text-danger');
+      elements.input.classList.add('is-invalid');
+      isFeedback.textContent = i18nInstance.t(`errors.${error}`);
+      break;
+    case true:
+      isFeedback.textContent = '';
+      break;
+    default:
+      break;
   }
 };
 
 const handlerProcess = (elements, value, i18nInstance) => {
   const { feedback: isFeedback } = elements;
   const { status, error } = value;
+
+  clearData(elements);
 
   switch (status) {
     case 'loading':
