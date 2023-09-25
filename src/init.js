@@ -64,16 +64,18 @@ const fetchRss = (url, state) => {
 };
 
 const getUpdatePosts = (state) => {
-  const promises = state.feeds.map(({ url, id }) => axios.get(addProxy(url), { timeout: TIMEOUT })
+  const promises = state.feeds.map(({ url, id }) => axios
+    .get(addProxy(url), { timeout: TIMEOUT })
     .then((response) => {
       const oldPosts = state.posts;
       const { posts: newPosts } = parseData(response.data.contents);
-      const posts = _.differenceBy(newPosts, oldPosts, 'link')
-        .map((post) => ({
+      const posts = _.differenceBy(newPosts, oldPosts, 'link').map(
+        (post) => ({
           ...post,
           channelId: id,
           id: _.uniqueId(),
-        }));
+        }),
+      );
 
       state.posts = posts.concat(...state.posts);
     })
@@ -93,6 +95,10 @@ const app = () => {
     feeds: document.querySelector('.feeds'),
     posts: document.querySelector('.posts'),
     button: document.querySelector('.rss-form button[type="submit"]'),
+    modal: document.querySelector('.modal'),
+    modalTitle: document.querySelector('.modal-title'),
+    modalBody: document.querySelector('.modal-body'),
+    modalLink: document.querySelector('.modal-link'),
   };
 
   const initialState = {
