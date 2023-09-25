@@ -27,18 +27,12 @@ const handlerFormUrl = (elements, value, i18nInstance) => {
   const { feedback, input } = elements;
   const { isValid, error } = value;
 
-  // clearData(elements);
-  switch (isValid) {
-    case false:
-      feedback.textContent = i18nInstance.t(`errors.${error}`);
-      feedback.classList.add('text-danger');
-      input.classList.add('is-invalid');
-      break;
-    case true:
-      // feedback.textContent = '';
-      break;
-    default:
-      break;
+  if (!isValid) {
+    feedback.textContent = i18nInstance.t(`errors.${error}`);
+    feedback.classList.add('text-danger');
+    input.classList.add('is-invalid');
+  } else {
+    feedback.textContent = '';
   }
 };
 
