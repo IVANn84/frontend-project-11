@@ -35,7 +35,7 @@ const handlerFormUrl = (elements, value, i18nInstance) => {
       input.classList.add('is-invalid');
       break;
     case true:
-      feedback.textContent = '';
+      // feedback.textContent = '';
       break;
     default:
       break;
