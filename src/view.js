@@ -24,18 +24,18 @@ const renderVisitedPosts = (idVisitedPosts) => {
 };
 
 const handlerFormUrl = (elements, value, i18nInstance) => {
-  const { feedback: isFeedback } = elements;
+  const { feedback, input } = elements;
   const { isValid, error } = value;
 
   clearData(elements);
   switch (isValid) {
     case false:
-      elements.feedback.classList.add('text-danger');
-      elements.input.classList.add('is-invalid');
-      isFeedback.textContent = i18nInstance.t(`errors.${error}`);
+      feedback.classList.add('text-danger');
+      input.classList.add('is-invalid');
+      feedback.textContent = i18nInstance.t(`errors.${error}`);
       break;
     case true:
-      isFeedback.textContent = '';
+      feedback.textContent = '';
       break;
     default:
       break;
@@ -43,27 +43,29 @@ const handlerFormUrl = (elements, value, i18nInstance) => {
 };
 
 const handlerProcess = (elements, value, i18nInstance) => {
-  const { feedback: isFeedback } = elements;
+  const {
+    form, feedback, input, button,
+  } = elements;
   const { status, error } = value;
 
   clearData(elements);
 
   switch (status) {
     case 'loading':
-      elements.input.disabled = true;
-      elements.button.disabled = true;
+      input.disabled = true;
+      button.disabled = true;
       break;
     case 'success':
-      elements.feedback.classList.add('text-success');
-      isFeedback.textContent = i18nInstance.t(`status.${status}`);
-      elements.form.reset();
-      elements.input.focus();
+      feedback.classList.add('text-success');
+      feedback.textContent = i18nInstance.t(`status.${status}`);
+      form.reset();
+      input.focus();
       break;
     case 'failed':
-      elements.feedback.classList.add('text-danger');
-      elements.input.classList.add('is-invalid');
+      feedback.classList.add('text-danger');
+      input.classList.add('is-invalid');
 
-      isFeedback.textContent = i18nInstance.t(`errors.${error}`);
+      feedback.textContent = i18nInstance.t(`errors.${error}`);
       break;
     default:
       break;
