@@ -99,6 +99,7 @@ const app = () => {
     modalTitle: document.querySelector('.modal-title'),
     modalBody: document.querySelector('.modal-body'),
     modalLink: document.querySelector('.modal-link'),
+
   };
 
   const initialState = {
