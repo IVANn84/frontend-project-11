@@ -52,7 +52,6 @@ const fetchRss = (url, state) => {
       });
       state.feeds.push(dataRSS.feed);
       state.posts.unshift(...dataRSS.posts);
-      console.log(state);
       state.loadingProcess = { status: 'success', error: '' };
     })
     .catch((error) => {
@@ -95,11 +94,12 @@ const app = () => {
     feeds: document.querySelector('.feeds'),
     posts: document.querySelector('.posts'),
     button: document.querySelector('.rss-form button[type="submit"]'),
-    modal: document.querySelector('.modal'),
-    modalTitle: document.querySelector('.modal-title'),
-    modalBody: document.querySelector('.modal-body'),
-    modalLink: document.querySelector('.modal-link'),
+    // modal: document.querySelector('.modal'),
+    // modalTitle: document.querySelector('.modal-title'),
+    // modalBody: document.querySelector('.modal-body'),
+    // modalLink: document.querySelector('.modal-link'),
   };
+  console.log(elements);
 
   const initialState = {
     form: {
