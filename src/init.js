@@ -93,7 +93,7 @@ const app = () => {
     submit: document.querySelector('button[type="submit"]'),
     feeds: document.querySelector('.feeds'),
     posts: document.querySelector('.posts'),
-    button: document.querySelector('.rss-form button[type="submit"]'),
+    // button: document.querySelector('.rss-form button[type="submit"]'),
     modalTitle: document.querySelector('.modal-title'),
     modalBody: document.querySelector('.modal-body'),
     modalLink: document.querySelector('.modal-link'),
