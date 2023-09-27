@@ -84,7 +84,7 @@ const watch = (state, elements, i18nInstance) => onChange(state, (path, value) =
       renderVisitedPosts(value);
       break;
     case 'ui.id':
-      renderModal(state, value);
+      renderModal(state, value, elements);
       break;
     default:
       break;

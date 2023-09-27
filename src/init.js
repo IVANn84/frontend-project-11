@@ -95,9 +95,9 @@ const app = () => {
     posts: document.querySelector('.posts'),
     button: document.querySelector('.rss-form button[type="submit"]'),
     // modal: document.querySelector('.modal'),
-    // modalTitle: document.querySelector('.modal-title'),
-    // modalBody: document.querySelector('.modal-body'),
-    // modalLink: document.querySelector('.modal-link'),
+    modalTitle: document.querySelector('.modal-title'),
+    modalBody: document.querySelector('.modal-body'),
+    modalLink: document.querySelector('.modal-link'),
   };
   // console.log(elements);
 
