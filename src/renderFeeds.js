@@ -1,5 +1,6 @@
 export default (feedsList, elements, i18next) => {
-  elements.feeds.innerHTML = '';
+  const { feeds } = elements;
+  feeds.innerHTML = '';
   const divContainer = document.createElement('div');
   const divTitle = document.createElement('div');
   const ul = document.createElement('ul');
@@ -12,7 +13,7 @@ export default (feedsList, elements, i18next) => {
   divTitle.append(h2);
   ul.classList.add('list-group', 'border-0', 'rounded-0');
   divContainer.append(divTitle, ul);
-  elements.feeds.append(divContainer);
+  feeds.append(divContainer);
 
   feedsList.forEach((feed) => {
     const li = document.createElement('li');
@@ -28,22 +29,3 @@ export default (feedsList, elements, i18next) => {
     ul.prepend(li);
   });
 };
-// const divEl = document.createElement('div');
-// divEl.classList.add('list-group', 'border-0', 'rounded-0');
-// feedsList.forEach((feed) => {
-//   const liEl = document.createElement('li');
-//   liEl.classList.add('list-group-item', 'border-0', 'border-end-0');
-
-//   const header = document.createElement('h3');
-//   header.classList.add('h6', 'm-0');
-//   header.textContent = feed.title;
-
-//   const description = document.createElement('p');
-//   description.classList.add('m-0', 'small', 'text-black-50');
-//   description.textContent = feed.description;
-
-//   liEl.prepend(description);
-//   liEl.prepend(header);
-
-//   divEl.prepend(liEl);
-// });
