@@ -90,7 +90,6 @@ const app = () => {
     form: document.querySelector('.rss-form'),
     input: document.getElementById('url-input'),
     feedback: document.querySelector('.feedback'),
-    // submit: document.querySelector('button[type="submit"]'),
     feeds: document.querySelector('.feeds'),
     posts: document.querySelector('.posts'),
     button: document.querySelector('.rss-form button[type="submit"]'),
