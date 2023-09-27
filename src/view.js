@@ -15,13 +15,13 @@ const clearData = (elements) => {
   button.disabled = false;
 };
 
-const renderVisitedPosts = (idVisitedPosts) => {
-  idVisitedPosts.forEach((id) => {
-    const link = document.querySelector(`a[data-id="${id}"]`);
-    link.classList.remove('fw-bold');
-    link.classList.add('fw-normal', 'link-secondary');
-  });
-};
+// const renderVisitedPosts = (idVisitedPosts) => {
+//   idVisitedPosts.forEach((id) => {
+//     const link = document.querySelector(`a[data-id="${id}"]`);
+//     link.classList.remove('fw-bold');
+//     link.classList.add('fw-normal', 'link-secondary');
+//   });
+// };
 
 const handlerFormUrl = (elements, value, i18nInstance) => {
   const { feedback, input } = elements;
@@ -81,10 +81,10 @@ const watch = (state, elements, i18nInstance) => onChange(state, (path, value) =
       renderPosts(state, value, elements, i18nInstance);
       break;
     case 'ui.visitedPosts':
-      renderVisitedPosts(value);
+      renderModal(state, elements);
       break;
     case 'ui.id':
-      renderModal(state, value, elements);
+      renderModal(state, elements);
       break;
     default:
       break;
