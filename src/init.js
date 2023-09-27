@@ -98,7 +98,6 @@ const app = () => {
     modalBody: document.querySelector('.modal-body'),
     modalLink: document.querySelector('.modal-link'),
   };
-  // console.log(elements);
 
   const initialState = {
     form: {
