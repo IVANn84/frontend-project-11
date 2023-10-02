@@ -52,7 +52,6 @@ const handlerProcess = (elements, value, i18nInstance) => {
     case 'failed':
       feedback.classList.add('text-danger');
       input.classList.add('is-invalid');
-
       feedback.textContent = i18nInstance.t(`errors.${error}`);
       break;
     default:
