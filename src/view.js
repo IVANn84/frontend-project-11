@@ -24,7 +24,10 @@ const handlerFormUrl = (elements, value, i18nInstance) => {
     feedback.classList.add('text-danger');
     input.classList.add('is-invalid');
   } else {
-    feedback.textContent = '';
+    clearData(elements);
+    // feedback.textContent = '';
+    // feedback.classList.remove('text-danger');
+    // input.classList.remove('is-invalid');
   }
 };
 
@@ -34,7 +37,7 @@ const handlerProcess = (elements, value, i18nInstance) => {
   } = elements;
   const { status, error } = value;
 
-  clearData(elements);
+  // clearData(elements);
 
   switch (status) {
     case 'loading':
