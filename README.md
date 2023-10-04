@@ -28,4 +28,4 @@ A service for aggregating RSS feeds, with which it is convenient to read a varie
  ```bash
  make build
  ```
- ## **Example usage:** [*Open this page Vercel.*](https://frontend-project-11-hazel-nine.vercel.app/)
+ ## **Example usage:** [*Open this page Vercel.*](https://frontend-project-11-ikygdz7e2-ivann84.vercel.app/)
