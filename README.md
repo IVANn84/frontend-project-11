@@ -15,6 +15,7 @@ A service for aggregating RSS feeds, with which it is convenient to read a varie
 
 ## **Installation:**
 1. Clone the project
+
 2. Install dependencies
 
 ```bash
